@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Caveat:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* SisterWisdoms palette — warm, wise, feminine */
+  --sw-cream: #FDF8F0;
+  --sw-blush: #E8C4C4;
+  --sw-dusty-rose: #C9929B;
+  --sw-deep-plum: #6B3A5D;
+  --sw-sage: #8B9E82;
+  --sw-warm-brown: #7A5C4F;
+  --sw-gold-accent: #C4A35A;
+  --sw-charcoal: #3A3332;
+  --sw-soft-white: #FFFDF9;
+
+  --background: var(--sw-cream);
+  --foreground: var(--sw-charcoal);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: #FDF8F0;
+  --color-blush: #E8C4C4;
+  --color-dusty-rose: #C9929B;
+  --color-deep-plum: #6B3A5D;
+  --color-sage: #8B9E82;
+  --color-warm-brown: #7A5C4F;
+  --color-gold-accent: #C4A35A;
+  --color-charcoal: #3A3332;
+  --color-soft-white: #FFFDF9;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-handwritten {
+  font-family: 'Caveat', cursive;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Subtle animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes floatEnvelope {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.animate-float {
+  animation: floatEnvelope 4s ease-in-out infinite;
+}
+
+/* Decorative divider */
+.divider-ornament::after {
+  content: '✦';
+  display: block;
+  text-align: center;
+  font-size: 1.25rem;
+  color: var(--sw-gold-accent);
+  margin: 1.5rem auto;
+  letter-spacing: 0.5em;
+}
