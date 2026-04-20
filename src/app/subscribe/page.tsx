@@ -7,6 +7,9 @@ export const metadata: Metadata = {
     "Choose your collection and start receiving handwritten letters of wisdom in your mailbox each month.",
 };
 
+const MONTHLY_LINK = "https://square.link/u/zKWOP3BM";
+const ANNUAL_LINK = "https://square.link/u/gxCxzA38";
+
 const plans = [
   {
     name: "Monthly",
@@ -20,6 +23,7 @@ const plans = [
       "Cancel anytime",
     ],
     accent: false,
+    link: MONTHLY_LINK,
   },
   {
     name: "Annual",
@@ -34,6 +38,7 @@ const plans = [
       "Best value",
     ],
     accent: true,
+    link: ANNUAL_LINK,
   },
 ];
 
@@ -114,15 +119,18 @@ export default function SubscribePage() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  className={`w-full py-4 rounded-full text-sm tracking-widest uppercase font-medium transition-colors ${
+                <a
+                  href={plan.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`block w-full py-4 rounded-full text-sm tracking-widest uppercase font-medium transition-colors ${
                     plan.accent
                       ? "bg-gold-accent text-charcoal hover:bg-gold-accent/90"
                       : "bg-deep-plum text-soft-white hover:bg-warm-brown"
                   }`}
                 >
                   Choose {plan.name}
-                </button>
+                </a>
               </div>
             ))}
           </div>

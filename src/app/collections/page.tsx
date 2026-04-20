@@ -1,5 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+
+const ANNUAL_LINK = "https://square.link/u/gxCxzA38";
 
 export const metadata: Metadata = {
   title: "Collections — Sister Wisdoms",
@@ -76,18 +77,22 @@ export default function CollectionsPage() {
                 {c.description}
               </p>
               <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  href="/subscribe"
+                <a
+                  href={ANNUAL_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="bg-deep-plum text-soft-white px-8 py-3 rounded-full text-sm tracking-widest uppercase font-medium hover:bg-warm-brown transition-colors"
                 >
                   Subscribe
-                </Link>
-                <Link
-                  href="/gift"
+                </a>
+                <a
+                  href={ANNUAL_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="border-2 border-deep-plum text-deep-plum px-8 py-3 rounded-full text-sm tracking-widest uppercase font-medium hover:bg-deep-plum hover:text-soft-white transition-colors"
                 >
                   Gift This Collection
-                </Link>
+                </a>
                 <span className="text-sm text-warm-brown/50">
                   {c.letters} letters · Mailed monthly
                 </span>

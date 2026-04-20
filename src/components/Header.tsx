@@ -42,12 +42,14 @@ export default function Header() {
           >
             Our Story
           </Link>
-          <Link
-            href="/subscribe"
+          <a
+            href="https://square.link/u/gxCxzA38"
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-deep-plum text-soft-white px-6 py-2.5 rounded-full hover:bg-warm-brown transition-colors tracking-wider"
           >
             Subscribe
-          </Link>
+          </a>
         </nav>
 
         {/* Mobile menu button */}
@@ -112,13 +114,15 @@ export default function Header() {
           >
             Our Story
           </Link>
-          <Link
-            href="/subscribe"
+          <a
+            href="https://square.link/u/gxCxzA38"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-deep-plum text-soft-white px-8 py-3 rounded-full mt-2"
             onClick={() => setMenuOpen(false)}
           >
             Subscribe
-          </Link>
+          </a>
         </nav>
       )}
     </header>

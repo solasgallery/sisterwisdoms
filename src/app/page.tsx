@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+/* ── Square checkout links ── */
+const MONTHLY_LINK = "https://square.link/u/zKWOP3BM";
+const ANNUAL_LINK = "https://square.link/u/gxCxzA38";
+
 /* ── Envelope icon (inline SVG) ── */
 function EnvelopeIcon({ className = "" }: { className?: string }) {
   return (
@@ -135,18 +139,22 @@ export default function HomePage() {
             magic. Curated letters. Real paper. Lasting meaning.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/subscribe"
+            <a
+              href={ANNUAL_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-deep-plum text-soft-white px-10 py-4 rounded-full text-sm tracking-widest uppercase font-medium hover:bg-warm-brown transition-colors"
             >
               Start Your Subscription
-            </Link>
-            <Link
-              href="/gift"
+            </a>
+            <a
+              href={ANNUAL_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               className="border-2 border-deep-plum text-deep-plum px-10 py-4 rounded-full text-sm tracking-widest uppercase font-medium hover:bg-deep-plum hover:text-soft-white transition-colors"
             >
               Give as a Gift
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -232,12 +240,14 @@ export default function HomePage() {
             />
           </div>
           <div className="text-center mt-14">
-            <Link
-              href="/collections"
+            <a
+              href={ANNUAL_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-deep-plum text-soft-white px-10 py-4 rounded-full text-sm tracking-widest uppercase font-medium hover:bg-warm-brown transition-colors inline-block"
             >
               Explore All Collections
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -265,12 +275,14 @@ export default function HomePage() {
               letters — arriving one by one in her mailbox — is a gift that
               says you truly know her.
             </p>
-            <Link
-              href="/gift"
+            <a
+              href={ANNUAL_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block bg-gold-accent text-charcoal px-10 py-4 rounded-full text-sm tracking-widest uppercase font-semibold hover:bg-gold-accent/90 transition-colors relative z-10"
             >
               Send a Gift Subscription
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -344,12 +356,14 @@ export default function HomePage() {
           <p className="text-soft-white/70 text-lg mb-10">
             Join the women who&apos;ve rediscovered the magic of the mailbox.
           </p>
-          <Link
-            href="/subscribe"
+          <a
+            href={ANNUAL_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-gold-accent text-charcoal px-12 py-4 rounded-full text-sm tracking-widest uppercase font-semibold hover:bg-gold-accent/90 transition-colors"
           >
             Begin Your Subscription
-          </Link>
+          </a>
         </div>
       </section>
     </>

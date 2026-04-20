@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
+const ANNUAL_LINK = "https://square.link/u/gxCxzA38";
+
 export const metadata: Metadata = {
   title: "FAQ — Sister Wisdoms",
   description:
@@ -95,12 +97,14 @@ export default function FAQPage() {
             >
               Contact Us
             </Link>
-            <Link
-              href="/subscribe"
+            <a
+              href={ANNUAL_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
               className="border-2 border-deep-plum text-deep-plum px-8 py-3 rounded-full text-sm tracking-widest uppercase font-medium hover:bg-deep-plum hover:text-soft-white transition-colors"
             >
               Start Subscribing
-            </Link>
+            </a>
           </div>
         </div>
       </section>
