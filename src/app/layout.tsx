@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     images: ["/og-default.jpg"],
   },
   verification: {
-    google: "REPLACE_WITH_GSC_TOKEN",
+    google: "YSl8UjrL_9v6Jdo-C0G5RD-g7Umk4I6jn8lvIn95Hec",
   },
 };
 
