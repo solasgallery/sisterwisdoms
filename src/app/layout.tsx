@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sisterwisdoms.com"),
   title: {
-    default: "Sister Wisdoms — Letters Worth Keeping",
+    default: "Sister Wisdoms — Something Beautiful Is On Its Way",
     template: "%s | Sister Wisdoms",
   },
   description:
-    "A snail mail subscription club delivering hand-curated letters of wisdom, story, and connection to your mailbox each month.",
+    "A monthly letter from a wise old friend — arriving in your mailbox, written on paper worth keeping. Coming soon from Salado, Texas.",
   alternates: {
     canonical: "/",
   },
@@ -114,9 +112,7 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <Header />
         <main className="flex-1">{children}</main>
-        <Footer />
       </body>
     </html>
   );
