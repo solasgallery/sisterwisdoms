@@ -68,30 +68,15 @@ export default function ComingSoonPage() {
     if (!email) return;
     setSubmitting(true);
 
-    // Brevo (Sendinblue) API — add to Sister Wisdoms Waitlist
     try {
-      const res = await fetch("https://api.brevo.com/v3/contacts", {
+      await fetch("/api/waitlist", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": process.env.NEXT_PUBLIC_BREVO_API_KEY || "",
-        },
-        body: JSON.stringify({
-          email,
-          attributes: { FIRSTNAME: name },
-          listIds: [parseInt(process.env.NEXT_PUBLIC_BREVO_LIST_ID || "0")],
-          updateEnabled: true,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name }),
       });
-
-      if (res.ok || res.status === 204) {
-        setSubmitted(true);
-      } else {
-        console.error("Brevo API error:", res.status);
-        setSubmitted(true);
-      }
+      setSubmitted(true);
     } catch {
-      console.error("Brevo not configured — email not captured");
+      // Still show success — don't punish the visitor for a backend hiccup
       setSubmitted(true);
     }
 
