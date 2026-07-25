@@ -62,25 +62,32 @@ export default function ComingSoonPage() {
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setSubmitting(true);
+    setSubmitError("");
 
     try {
-      await fetch("/api/waitlist", {
+      const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, name }),
       });
+      const result = await response.json().catch(() => ({ ok: false }));
+      if (!response.ok || result.ok !== true) {
+        throw new Error("Waitlist request was not confirmed");
+      }
       setSubmitted(true);
     } catch {
-      // Still show success — don't punish the visitor for a backend hiccup
-      setSubmitted(true);
+      setSubmitError(
+        "We couldn't confirm your place on the list. Please try again in a moment.",
+      );
+    } finally {
+      setSubmitting(false);
     }
-
-    setSubmitting(false);
   };
 
   return (
@@ -154,6 +161,11 @@ export default function ComingSoonPage() {
               <p className="text-warm-brown/40 text-xs mt-2">
                 Be the first to know when we launch. No spam, ever.
               </p>
+              {submitError && (
+                <p role="alert" className="text-deep-plum text-sm mt-3">
+                  {submitError}
+                </p>
+              )}
             </form>
           ) : (
             <div className="max-w-md mx-auto bg-soft-white rounded-2xl p-8 border border-blush/30 animate-fade-in-up">
