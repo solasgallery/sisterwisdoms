@@ -7,9 +7,9 @@ import "./globals.css";
 const typeFont = Courier_Prime({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-type", display: "swap" });
 const bodyFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--font-body", display: "swap" });
 
-const TITLE = "Sister Wisdoms | A Monthly Letter Subscription Gift";
+const TITLE = "Sister Wisdoms | Something beautiful is on its way";
 const DESC =
-  "Give a monthly paper letter from a wise old friend, mailed to her door. Write a note, pick a start month, and we'll email you to finish. $18 a month, one tier.";
+  "One paper letter a month from a wise old friend, mailed to someone you love. Coming soon from Salado, Texas.";
 const OG_ALT = "Sister Wisdoms. A letter, by mail.";
 // Trackers load on the production deployment only (not preview or local).
 const TRACK = process.env.VERCEL_ENV === "production";

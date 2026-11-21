@@ -154,7 +154,7 @@ export default function CapturePage() {
               </button>
               {error && (
                 <p role="alert" style={{ color: "#9b2c3d", fontSize: "0.875rem", textAlign: "center", lineHeight: 1.4 }}>
-                  {error === "unconfirmed" ? "We couldn\u2019t confirm you were added." : "We couldn\u2019t save your spot just now."} Email us at{" "}
+                  {error === "unconfirmed" ? "We couldn\u2019t confirm you were added." : "We couldn\u2019t add you to the list just now."} Email us at{" "}
                   <a href="mailto:cherie@solasgallery.com?subject=Please%20add%20me%20to%20the%20Sister%20Wisdoms%20waitlist" style={{ color: "#6B3A5D", fontWeight: 600 }}>cherie@solasgallery.com</a>{" "}
                   and we&apos;ll add you by hand.
                 </p>

@@ -1,75 +1,10 @@
-// Single source for every dated / priced element on sisterwisdoms.com.
-// Nothing date-based is hard-coded elsewhere.
+// Single source for site-wide constants on sisterwisdoms.com.
+// Teaser posture: no launch or mailing dates anywhere on the site.
 
 export const SITE = {
   url: "https://www.sisterwisdoms.com",
   name: "Sister Wisdoms",
-  priceUsd: 18, // $18/mo, locked by Tim 2026-11-21. Older $12/mo and $120/yr figures are superseded.
-  priceLabel: "$18 a month",
-  timezone: "America/Chicago",
-  // First paid Letter 1 mails in this month (STATUS.md: "mailed by the 25th").
-  firstLetterMonth: "2027-01", // YYYY-MM
-  firstLetterMailBy: "2027-01-25",
-  startMonthsOffered: 12,
-  notifyEmails: (process.env.SW_NOTIFY_EMAIL || "cherie@solasgallery.com,tim@solasgallery.com")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean),
-  senderEmail: "info@solasgallery.com",
-  senderName: "Sister Wisdoms",
-  replyEmail: "cherie@solasgallery.com",
+  priceLabel: "$18 a month", // $18/mo, locked by Tim 2026-11-21 and shown on the live site. $12/mo and $120/yr are superseded.
 };
-
-const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
-
-/** Current year-month in America/Chicago as [year, monthIndex0]. */
-function nowChicago(now = new Date()): [number, number, string] {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: SITE.timezone, year: "numeric", month: "2-digit", day: "2-digit",
-  }).format(now); // YYYY-MM-DD
-  const [y, m] = parts.split("-").map(Number);
-  return [y, m - 1, parts];
-}
-
-export type StartOption = { value: string; label: string };
-
-/** Start months a giver can pick. A month drops off once its mail-by day has passed
- * (day-of-month taken from SITE.firstLetterMailBy, Chicago time), computed per request. */
-export function startOptions(now = new Date()): StartOption[] {
-  const [fy, fm] = SITE.firstLetterMonth.split("-").map(Number);
-  const mailByDay = Number(SITE.firstLetterMailBy.slice(8, 10));
-  const today = nowChicago(now)[2]; // YYYY-MM-DD
-  let y = fy;
-  let m = fm - 1;
-  const mailBy = (yy: number, mm: number) => `${yy}-${String(mm + 1).padStart(2, "0")}-${String(mailByDay).padStart(2, "0")}`;
-  // skip every month whose mail-by date is already past
-  while (mailBy(y, m) < today) {
-    m++;
-    if (m > 11) { m = 0; y++; }
-  }
-  const out: StartOption[] = [];
-  for (let i = 0; i < SITE.startMonthsOffered; i++) {
-    const value = `${y}-${String(m + 1).padStart(2, "0")}`;
-    out.push({ value, label: `${MONTHS[m]} ${y}` });
-    m++;
-    if (m > 11) { m = 0; y++; }
-  }
-  return out;
-}
-
-/** True while the first-letter date is still in the future. */
-export function beforeFirstMailing(now = new Date()): boolean {
-  return nowChicago(now)[2] <= SITE.firstLetterMailBy;
-}
-
-export function firstMailingPhrase(now = new Date()): string {
-  const [fy, fm] = SITE.firstLetterMonth.split("-").map(Number);
-  return beforeFirstMailing(now)
-    ? `Our first letters mail in ${MONTHS[fm - 1]} ${fy}.`
-    : "A new letter mails each month.";
-}
 
 export const isPreview = () => process.env.VERCEL_ENV === "preview";
