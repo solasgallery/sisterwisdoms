@@ -77,7 +77,7 @@ export default function Home() {
             <li><a className="hover:text-deep-plum" href="#faq">Questions</a></li>
             <li><a className="hover:text-deep-plum" href="#founders">Who we are</a></li>
           </ul>
-          <a href="#gift" className="bg-deep-plum text-soft-white font-type text-sm px-4 py-2 rounded-md hover:bg-warm-brown">Give a gift</a>
+          <a href="#gift" className="bg-deep-plum text-soft-white font-type text-sm px-4 py-3 rounded-md hover:bg-warm-brown">Give a gift</a>
         </nav>
       </header>
 
@@ -113,7 +113,7 @@ export default function Home() {
                 className="rounded-md shadow-xl w-full h-auto"
               />
               <p className="text-sm text-warm-brown/80 mt-2">
-                Illustrative photograph. Typed in Courier on good paper, the way every letter will look.
+                Illustrative photograph. Every letter is typed in Courier.
               </p>
             </div>
           </div>
@@ -153,8 +153,8 @@ export default function Home() {
             <h2 className="font-type font-bold text-3xl text-deep-plum mb-8">Questions about giving a letter subscription</h2>
             <div className="divide-y divide-blush/40">
               {faq.map((f) => (
-                <details key={f.q} className="group py-4">
-                  <summary className="cursor-pointer font-type font-bold text-lg text-deep-plum list-none flex justify-between gap-4">
+                <details key={f.q} className="group py-2">
+                  <summary className="cursor-pointer font-type font-bold text-lg text-deep-plum list-none flex justify-between gap-4 py-3 min-h-[44px]">
                     <span>{f.q}</span>
                     <span aria-hidden="true" className="text-dusty-rose group-open:rotate-45 transition-transform">+</span>
                   </summary>
@@ -184,7 +184,7 @@ export default function Home() {
       <footer className="bg-deep-plum text-soft-white">
         <div className="max-w-5xl mx-auto px-5 py-8 font-type text-sm flex flex-col sm:flex-row gap-2 justify-between">
           <span>Sister Wisdoms · Salado, Texas · A Solas Gallery venture</span>
-          <a className="underline py-2 inline-block" href="https://solasgallery.com">solasgallery.com</a>
+          <a className="underline py-3 inline-block" href="https://solasgallery.com">solasgallery.com</a>
         </div>
       </footer>
     </>

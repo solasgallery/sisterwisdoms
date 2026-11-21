@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Courier_Prime, Cormorant_Garamond, Caveat } from "next/font/google";
+import { Courier_Prime, Cormorant_Garamond } from "next/font/google";
 import { SITE } from "@/lib/config";
 import "./globals.css";
 
 const typeFont = Courier_Prime({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-type", display: "swap" });
 const bodyFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--font-body", display: "swap" });
-const handFont = Caveat({ subsets: ["latin"], weight: ["600"], variable: "--font-hand", display: "swap" });
 
 const TITLE = "Sister Wisdoms | A Monthly Letter Subscription Gift";
 const DESC =
@@ -42,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full antialiased ${typeFont.variable} ${bodyFont.variable} ${handFont.variable}`}>
+    <html lang="en" className={`h-full antialiased ${typeFont.variable} ${bodyFont.variable}`}>
       <head>
         {/*
           Google Tag Manager

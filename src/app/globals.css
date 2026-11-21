@@ -36,9 +36,6 @@ body {
   font-family: var(--font-body), Georgia, serif;
 }
 
-.font-handwritten {
-  font-family: var(--font-hand), cursive;
-}
 .font-type {
   font-family: var(--font-type), 'Courier New', Courier, monospace;
 }

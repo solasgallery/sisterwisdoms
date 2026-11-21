@@ -27,7 +27,7 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
     try {
       const res = await fetch("/api/gift", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const json = await res.json().catch(() => ({ ok: false }));
-      if (!res.ok || json.ok !== true) throw new Error(json.error || "failed");
+      if (!res.ok || json.ok !== true) throw new Error(typeof json.error === "string" ? json.error : "failed");
       setDone({ giver: String(body.giverEmail), recipient: String(body.recipientName), start: json.startLabel || "", preview: !!json.preview });
       setState("done");
       (window as unknown as { dataLayer?: unknown[] }).dataLayer?.push({ event: "gift_request_submitted" });
