@@ -10,7 +10,7 @@ const bodyFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500",
 const TITLE = "Sister Wisdoms | Something beautiful is on its way";
 const DESC =
   "One paper letter a month from a wise old friend, mailed to someone you love. Coming soon from Salado, Texas.";
-const OG_ALT = "Sister Wisdoms. A letter, by mail.";
+const OG_ALT = "Sister Wisdoms. Something beautiful is on its way.";
 // Trackers load on the production deployment only (not preview or local).
 const TRACK = process.env.VERCEL_ENV === "production";
 
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     siteName: "Sister Wisdoms",
     title: TITLE,
     description: DESC,
-    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: OG_ALT }],
+    images: [{ url: "/og-teaser.jpg", width: 1200, height: 630, alt: OG_ALT }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESC,
-    images: [{ url: "/og-default.jpg", alt: OG_ALT }],
+    images: [{ url: "/og-teaser.jpg", alt: OG_ALT }],
   },
   verification: { google: "YSl8UjrL_9v6Jdo-C0G5RD-g7Umk4I6jn8lvIn95Hec" },
 };

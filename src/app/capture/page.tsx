@@ -74,7 +74,7 @@ export default function CapturePage() {
       >
         {submitted ? (
           <div>
-            <div style={{ fontSize: "3rem", marginBottom: "12px" }}>&#x2713;</div>
+            <div aria-hidden="true" style={{ fontSize: "3rem", marginBottom: "12px" }}>&#x2713;</div>
             <h2
               style={{
                 fontFamily: "var(--font-type), 'Courier New', monospace",
@@ -83,13 +83,11 @@ export default function CapturePage() {
                 marginBottom: "8px",
               }}
             >
-              {saved ? "Thank you. You are on the list." : "Preview: not saved"}
+              {saved ? "You're on the list — we'll write when there's news." : "Preview: not saved"}
             </h2>
-            <p style={{ color: "#7A5C4F", fontSize: "1rem" }}>
-              {saved
-                ? "We will write to you now and then about Sister Wisdoms."
-                : "This is a preview site. Nothing was added to the list."}
-            </p>
+            {!saved && (
+              <p style={{ color: "#7A5C4F", fontSize: "1rem" }}>This is a preview site. Nothing was added to the list.</p>
+            )}
           </div>
         ) : (
           <>

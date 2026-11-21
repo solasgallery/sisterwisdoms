@@ -42,12 +42,10 @@ export default function WaitlistForm() {
     const saved = state === "saved";
     return (
       <div role="status" className="max-w-md mx-auto text-center">
-        <p className="font-type font-bold text-xl text-deep-plum mb-2">
-          {saved ? "Thank you. You are on the list." : "Preview: not saved"}
+        <p className={`font-type font-bold text-xl text-deep-plum${saved ? "" : " mb-2"}`}>
+          {saved ? "You're on the list — we'll write when there's news." : "Preview: not saved"}
         </p>
-        <p className="text-lg text-warm-brown">
-          {saved ? "We will write to you now and then about Sister Wisdoms." : "This is a preview site. Nothing was added to the list."}
-        </p>
+        {!saved && <p className="text-lg text-warm-brown">This is a preview site. Nothing was added to the list.</p>}
       </div>
     );
   }

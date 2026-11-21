@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     url: "/capture",
     title: "Join the Sister Wisdoms list",
     description: "Leave your name and email and we will keep you posted about Sister Wisdoms.",
-    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "Sister Wisdoms. A letter, by mail." }],
+    images: [{ url: "/og-teaser.jpg", width: 1200, height: 630, alt: "Sister Wisdoms. Something beautiful is on its way." }],
   },
 };
 
