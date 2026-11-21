@@ -25,7 +25,7 @@ export default function Home() {
       name: "Sister Wisdoms",
       url: SITE.url,
       logo: `${SITE.url}/og-default.jpg`,
-      parentOrganization: { "@type": "Organization", name: "Solas Gallery", url: "https://solasgallery.com" },
+      parentOrganization: { "@type": "Organization", name: "Solas Gallery", url: "https://www.solasgallery.com" },
       founder: [
         { "@type": "Person", name: "Tim Flanagan" },
         { "@type": "Person", name: "Cherie Flanagan" },
@@ -171,7 +171,7 @@ export default function Home() {
             <h2 className="font-type font-bold text-3xl text-deep-plum mb-5">Tim &amp; Cherie</h2>
             <p className="text-xl text-warm-brown leading-relaxed mb-4">
               We are Tim and Cherie Flanagan, a husband and wife in Salado, Texas. For 30 years we have built{" "}
-              <a className="underline text-deep-plum py-1 inline-block" href="https://solasgallery.com">Solas Gallery</a> and a life around art,
+              <a className="underline text-deep-plum py-1 inline-block" href="https://www.solasgallery.com">Solas Gallery</a> and a life around art,
               story, and community.
             </p>
             <p className="text-xl text-warm-brown leading-relaxed">
@@ -184,7 +184,7 @@ export default function Home() {
       <footer className="bg-deep-plum text-soft-white">
         <div className="max-w-5xl mx-auto px-5 py-8 font-type text-sm flex flex-col sm:flex-row gap-2 justify-between">
           <span>Sister Wisdoms · Salado, Texas · A Solas Gallery venture</span>
-          <a className="underline py-3 inline-block" href="https://solasgallery.com">solasgallery.com</a>
+          <a className="underline py-3 inline-block" href="https://www.solasgallery.com">solasgallery.com</a>
         </div>
       </footer>
     </>

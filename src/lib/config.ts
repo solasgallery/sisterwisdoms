@@ -2,7 +2,7 @@
 // Nothing date-based is hard-coded elsewhere.
 
 export const SITE = {
-  url: "https://sisterwisdoms.com",
+  url: "https://www.sisterwisdoms.com",
   name: "Sister Wisdoms",
   priceUsd: 18, // $18/mo as shown on the live site. Do not change here without Tim (STATUS/OM say $12 - see DECISIONS).
   priceLabel: "$18 a month",
