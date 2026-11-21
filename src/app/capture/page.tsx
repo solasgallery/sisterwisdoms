@@ -6,6 +6,7 @@ export default function CapturePage() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -16,6 +17,7 @@ export default function CapturePage() {
     const formData = new FormData(form)
 
     if (formData.get("website")) {
+      setLoading(false)
       setSubmitted(true)
       return
     }
@@ -35,10 +37,12 @@ export default function CapturePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
-      if (!res.ok) throw new Error("Network error")
+      const j = await res.json().catch(() => ({}))
+      if (!res.ok || !j.ok) throw new Error("Not saved")
+      setSaved(j.saved === true)
       setSubmitted(true)
     } catch {
-      setError("Something went wrong. Please try again or ask staff for help.")
+      setError("We could not save your details. Please try again, or email info@solasgallery.com.")
       setLoading(false)
     }
   }
@@ -50,9 +54,9 @@ export default function CapturePage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#f7f2ed",
+        background: "#FDF8F0",
         padding: "24px",
-        fontFamily: "'Inter', system-ui, sans-serif",
+        fontFamily: "var(--font-body), Georgia, serif",
       }}
     >
       <div
@@ -72,26 +76,28 @@ export default function CapturePage() {
             <div style={{ fontSize: "3rem", marginBottom: "12px" }}>&#x2713;</div>
             <h2
               style={{
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: "var(--font-type), 'Courier New', monospace",
                 fontSize: "1.5rem",
-                color: "#7a4a6e",
+                color: "#6B3A5D",
                 marginBottom: "8px",
               }}
             >
-              You're on the List!
+              {saved ? "Thank you. You are on the list." : "Preview: not saved"}
             </h2>
-            <p style={{ color: "#8a7e74", fontSize: "0.9rem" }}>
-              We'll email you when Sister Wisdoms letters are ready to give.
+            <p style={{ color: "#7A5C4F", fontSize: "1rem" }}>
+              {saved
+                ? "We will write to you now and then about Sister Wisdoms."
+                : "This is a preview site. Nothing was added to the list."}
             </p>
           </div>
         ) : (
           <>
             <h1
               style={{
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: "var(--font-type), 'Courier New', monospace",
                 fontWeight: 700,
                 fontSize: "1.6rem",
-                color: "#7a4a6e",
+                color: "#6B3A5D",
                 marginBottom: "4px",
               }}
             >
@@ -100,13 +106,13 @@ export default function CapturePage() {
             <p
               style={{
                 fontSize: "0.85rem",
-                color: "#8a7e74",
+                color: "#7A5C4F",
                 marginBottom: "24px",
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: "var(--font-type), 'Courier New', monospace",
                 fontStyle: "italic",
               }}
             >
-              A monthly letter, by mail
+              A letter, by mail
             </p>
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
               <div>
@@ -135,7 +141,7 @@ export default function CapturePage() {
                   padding: "14px",
                   border: "none",
                   borderRadius: "8px",
-                  background: "#7a4a6e",
+                  background: "#6B3A5D",
                   color: "#fff",
                   fontSize: "1rem",
                   fontWeight: 500,
@@ -143,11 +149,11 @@ export default function CapturePage() {
                   opacity: loading ? 0.5 : 1,
                 }}
               >
-                {loading ? "Submitting…" : "Join the Waitlist"}
+                {loading ? "Submitting…" : "Keep me posted"}
               </button>
               {error && <p style={{ color: "#c45", fontSize: "0.8rem", textAlign: "center" }}>{error}</p>}
               <p style={{ fontSize: "0.7rem", color: "#a09486", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
-                We'll email you about Sister Wisdoms only. Unsubscribe anytime.
+                We will email you about Sister Wisdoms only. Unsubscribe anytime.
               </p>
             </form>
           </>
@@ -161,7 +167,7 @@ const labelStyle: React.CSSProperties = {
   fontSize: "0.75rem",
   textTransform: "uppercase",
   letterSpacing: "0.08em",
-  color: "#8a7e74",
+  color: "#7A5C4F",
   display: "block",
   marginBottom: "4px",
 }

@@ -58,7 +58,7 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
       <fieldset className="space-y-4">
         <legend className="font-type text-lg text-deep-plum mb-2">1. Your message</legend>
         <div>
-          <label htmlFor="message" className={label}>Gift message (goes with her first letter)</label>
+          <label htmlFor="message" className={label}>Gift message</label>
           <textarea id="message" name="message" rows={4} maxLength={500} className={field}
             placeholder="Something you would say to her, in your own words." />
         </div>

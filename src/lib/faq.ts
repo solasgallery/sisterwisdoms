@@ -11,7 +11,7 @@ export function getFaq(now = new Date()): Faq[] {
     },
     {
       q: "Is a monthly letter a good gift for someone who has everything?",
-      a: "It is not an object. It is a paper letter in her own mailbox once a month, so it keeps arriving long after the occasion. Your message goes with the first one.",
+      a: "Yes. It is a paper letter in her own mailbox once a month, so it keeps arriving long after the occasion. You can add a message to your gift in the form.",
     },
     {
       q: "How do I give a letter subscription as a gift?",
@@ -31,7 +31,7 @@ export function getFaq(now = new Date()): Faq[] {
     },
     {
       q: "Is it a paper letter or an email?",
-      a: "Paper. Each letter is mailed to the recipient's address in the United States through the postal service, from Salado, Texas.",
+      a: "Paper. Each letter is mailed to the recipient's address in the United States through the postal service.",
     },
     {
       q: "Can I send it to my mom, sister, or a friend?",
@@ -43,7 +43,7 @@ export function getFaq(now = new Date()): Faq[] {
     },
     {
       q: "Can I add a personal note?",
-      a: "Yes. The gift message box in the form is for that. Your words go to us with the order, and we send them along with her first letter.",
+      a: "Yes. The gift message box in the form is for that. Your words come to us with the order, and the email we send you will confirm how we pass them along.",
     },
     {
       q: "Can I cancel or change an address later?",

@@ -5,7 +5,24 @@ import { addContact, esc, sendMail } from "@/lib/brevo";
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const t = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
 
+// Simple per-IP limit (in memory, per server instance): 5 requests per 10 minutes.
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_HITS = 5;
+const hits = new Map<string, number[]>();
+function limited(ip: string): boolean {
+  const now = Date.now();
+  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  recent.push(now);
+  hits.set(ip, recent);
+  if (hits.size > 5000) for (const [k, v] of hits) if (!v.some((t) => now - t < WINDOW_MS)) hits.delete(k);
+  return recent.length > MAX_HITS;
+}
+
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || req.headers.get("x-real-ip") || "unknown";
+  if (limited(ip)) {
+    return NextResponse.json({ ok: false, error: "Too many requests. Please wait a few minutes and try again." }, { status: 429 });
+  }
   let b: Record<string, unknown>;
   try {
     b = await req.json();

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addContact } from "@/lib/brevo";
+import { isPreview } from "@/lib/config";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -21,9 +22,11 @@ export async function POST(req: NextRequest) {
       console.error("BREVO_API_KEY not set");
       return NextResponse.json({ ok: false, error: "Waitlist is temporarily unavailable" }, { status: 503 });
     }
+    // On preview, contact adds are skipped by design. Say so instead of claiming it was saved.
+    if (isPreview()) return NextResponse.json({ ok: true, saved: false, preview: true });
     const ok = await addContact(email, attrs);
     if (!ok) return NextResponse.json({ ok: false, error: "Waitlist provider rejected the request" }, { status: 502 });
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, saved: true });
   } catch (err) {
     console.error("Waitlist error:", err);
     return NextResponse.json({ ok: false, error: "Waitlist request failed" }, { status: 500 });

@@ -24,7 +24,7 @@ export default function Home() {
       "@id": `${SITE.url}/#org`,
       name: "Sister Wisdoms",
       url: SITE.url,
-      logo: `${SITE.url}/og-default.jpg`,
+      logo: `${SITE.url}/logo.png`,
       parentOrganization: { "@type": "Organization", name: "Solas Gallery", url: "https://www.solasgallery.com" },
       founder: [
         { "@type": "Person", name: "Tim Flanagan" },
@@ -91,8 +91,8 @@ export default function Home() {
                 A monthly letter subscription, given as a gift
               </h1>
               <p className="text-xl md:text-2xl text-warm-brown leading-relaxed mb-4">
-                One paper letter a month from a wise old friend, mailed to someone you love. The kind of encouragement most of
-                us wish somebody would send.
+                One paper letter a month from a wise old friend, mailed to someone you love. Warm, honest encouragement, right
+                in her mailbox.
               </p>
               <p className="text-lg text-warm-brown mb-8">
                 {SITE.priceLabel}. One tier. {firstMailingPhrase(now)}
@@ -113,7 +113,7 @@ export default function Home() {
                 className="rounded-md shadow-xl w-full h-auto"
               />
               <p className="text-sm text-warm-brown/80 mt-2">
-                Illustrative photograph. Every letter is typed in Courier.
+                Illustrative photograph.
               </p>
             </div>
           </div>

@@ -9,7 +9,7 @@ const bodyFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500",
 
 const TITLE = "Sister Wisdoms | A Monthly Letter Subscription Gift";
 const DESC =
-  "Give a monthly paper letter from a wise old friend, mailed to her door from Salado, Texas. Add your message, pick a start month. $18 a month, one tier.";
+  "Give a monthly paper letter from a wise old friend, mailed to her door. Add your message, pick a start month. $18 a month, one tier.";
 const OG_ALT = "A typed letter on cream paper beside an envelope and dried lavender";
 
 export const metadata: Metadata = {
