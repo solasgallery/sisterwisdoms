@@ -10,11 +10,11 @@ export function getFaq(now = new Date()): Faq[] {
       a: `It is a gift that arrives in the mailbox once a month instead of all at once. With Sister Wisdoms, the person you choose gets one paper letter a month, written in the voice of a wise old friend, mailed to their home address. It is ${SITE.priceLabel}.`,
     },
     {
-      q: "Is this a good gift for someone who has everything?",
-      a: "It was made for that person. It is not another object to dust. It is a letter on paper, in their own mailbox, each month, with your message to them attached to the first one.",
+      q: "Is a monthly letter a good gift for someone who has everything?",
+      a: "It is not an object. It is a paper letter in her own mailbox once a month, so it keeps arriving long after the occasion. Your message goes with the first one.",
     },
     {
-      q: "How does giving a Sister Wisdoms subscription work?",
+      q: "How do I give a letter subscription as a gift?",
       a: "Fill in the form on this page: your message, the month you want the letters to start, her name and mailing address, and your details. We read it and email you to complete payment. We do not take payment on this page. Nothing is charged until you have heard from us and said yes.",
     },
     {
@@ -27,11 +27,15 @@ export function getFaq(now = new Date()): Faq[] {
     },
     {
       q: "Where does the recipient's first letter begin?",
-      a: "Every subscriber begins at Letter 1, whichever month they start. A gift recipient never opens a letter that makes sense only to people who started earlier.",
+      a: "Every subscriber begins at Letter 1, whichever month they start. A gift can begin in any month you choose.",
     },
     {
       q: "Is it a paper letter or an email?",
       a: "Paper. Each letter is mailed to the recipient's address in the United States through the postal service, from Salado, Texas.",
+    },
+    {
+      q: "Can I send it to my mom, sister, or a friend?",
+      a: "Yes. Anyone who has a mailing address in the United States.",
     },
     {
       q: "Does the recipient need to do anything?",

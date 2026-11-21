@@ -119,8 +119,8 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
           <label htmlFor="giverPhone" className={label}>Your phone (optional)</label>
           <input id="giverPhone" name="giverPhone" type="tel" maxLength={40} autoComplete="tel" className={field} />
         </div>
-        <label className="flex items-start gap-3 text-base text-warm-brown">
-          <input type="checkbox" name="keepPosted" className="mt-1.5 h-4 w-4" />
+        <label className="flex items-start gap-3 text-base text-warm-brown py-2">
+          <input type="checkbox" name="keepPosted" className="mt-1 h-6 w-6 shrink-0" />
           <span>Also send me occasional Sister Wisdoms news by email.</span>
         </label>
         <div className="hidden" aria-hidden="true">
@@ -138,7 +138,7 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
         </p>
         {state === "error" && (
           <p role="alert" className="mt-3 text-deep-plum font-semibold">
-            {error} Nothing was submitted. Please try again, or email{" "}
+            {error}{error.includes("Nothing was submitted") ? "" : " Nothing was submitted."} Please try again, or email{" "}
             <a className="underline" href="mailto:cherie@solasgallery.com?subject=Sister%20Wisdoms%20gift">cherie@solasgallery.com</a>.
           </p>
         )}

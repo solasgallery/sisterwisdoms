@@ -70,7 +70,7 @@ export default function Home() {
 
       <header className="sticky top-0 z-20 bg-cream/95 backdrop-blur border-b border-blush/40">
         <nav aria-label="Sections" className="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4">
-          <a href="#top" className="font-type font-bold text-deep-plum text-lg">Sister Wisdoms</a>
+          <a href="#top" className="font-type font-bold text-deep-plum text-lg py-2 inline-block">Sister Wisdoms</a>
           <ul className="hidden sm:flex gap-6 font-type text-sm text-warm-brown">
             <li><a className="hover:text-deep-plum" href="#sample">The letter</a></li>
             <li><a className="hover:text-deep-plum" href="#how">How it works</a></li>
@@ -100,7 +100,7 @@ export default function Home() {
               <a href="#gift" className="inline-block bg-deep-plum text-soft-white font-type px-7 py-3.5 rounded-md hover:bg-warm-brown">
                 Start a gift
               </a>
-              <a href="#sample" className="inline-block font-type text-deep-plum underline underline-offset-4 ml-5">See the letter</a>
+              <a href="#sample" className="inline-block font-type text-deep-plum underline underline-offset-4 ml-3 px-2 py-3">See the letter</a>
             </div>
             <div id="sample" className="scroll-mt-24">
               <Image
@@ -171,7 +171,7 @@ export default function Home() {
             <h2 className="font-type font-bold text-3xl text-deep-plum mb-5">Tim &amp; Cherie</h2>
             <p className="text-xl text-warm-brown leading-relaxed mb-4">
               We are Tim and Cherie Flanagan, a husband and wife in Salado, Texas. For 30 years we have built{" "}
-              <a className="underline text-deep-plum" href="https://solasgallery.com">Solas Gallery</a> and a life around art,
+              <a className="underline text-deep-plum py-1 inline-block" href="https://solasgallery.com">Solas Gallery</a> and a life around art,
               story, and community.
             </p>
             <p className="text-xl text-warm-brown leading-relaxed">
@@ -184,7 +184,7 @@ export default function Home() {
       <footer className="bg-deep-plum text-soft-white">
         <div className="max-w-5xl mx-auto px-5 py-8 font-type text-sm flex flex-col sm:flex-row gap-2 justify-between">
           <span>Sister Wisdoms · Salado, Texas · A Solas Gallery venture</span>
-          <a className="underline" href="https://solasgallery.com">solasgallery.com</a>
+          <a className="underline py-2 inline-block" href="https://solasgallery.com">solasgallery.com</a>
         </div>
       </footer>
     </>
