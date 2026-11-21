@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, FormEvent } from "react"
+import { joinWaitlist, WAITLIST_FALLBACK_EMAIL, WAITLIST_FALLBACK_MAILTO } from "@/lib/waitlist"
 
 export default function CapturePage() {
   const [submitted, setSubmitted] = useState(false)
@@ -29,16 +30,10 @@ export default function CapturePage() {
       website: "",
     }
 
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-      if (!res.ok) throw new Error("Network error")
+    if (await joinWaitlist(data)) {
       setSubmitted(true)
-    } catch {
-      setError("Something went wrong. Please try again or ask staff for help.")
+    } else {
+      setError("not-saved")
       setLoading(false)
     }
   }
@@ -145,7 +140,13 @@ export default function CapturePage() {
               >
                 {loading ? "Submitting…" : "Join the Waitlist"}
               </button>
-              {error && <p style={{ color: "#c45", fontSize: "0.8rem", textAlign: "center" }}>{error}</p>}
+              {error && (
+                <p role="alert" style={{ color: "#c45", fontSize: "0.85rem", textAlign: "center", lineHeight: 1.4 }}>
+                  We couldn&apos;t save your spot just now. Email us at{" "}
+                  <a href={WAITLIST_FALLBACK_MAILTO} style={{ color: "#7a4a6e", fontWeight: 600 }}>{WAITLIST_FALLBACK_EMAIL}</a>{" "}
+                  and we&apos;ll add you by hand.
+                </p>
+              )}
               <p style={{ fontSize: "0.7rem", color: "#a09486", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
                 Be the first to know about upcoming retreats. Unsubscribe anytime.
               </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { joinWaitlist, WAITLIST_FALLBACK_EMAIL, WAITLIST_FALLBACK_MAILTO } from "@/lib/waitlist";
 
 /* ── Decorative wax-seal SVG ── */
 function WaxSeal({ className = "" }: { className?: string }) {
@@ -62,22 +63,19 @@ export default function ComingSoonPage() {
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setSubmitting(true);
+    setFailed(false);
 
-    try {
-      await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name }),
-      });
+    // Only claim success when the server confirms the signup was saved.
+    if (await joinWaitlist({ email, name })) {
       setSubmitted(true);
-    } catch {
-      // Still show success — don't punish the visitor for a backend hiccup
-      setSubmitted(true);
+    } else {
+      setFailed(true);
     }
 
     setSubmitting(false);
@@ -151,6 +149,15 @@ export default function ComingSoonPage() {
               >
                 {submitting ? "Joining..." : "Join the Waitlist"}
               </button>
+              {failed && (
+                <p role="alert" className="text-deep-plum text-sm leading-relaxed">
+                  We couldn&apos;t save your spot just now. Email us at{" "}
+                  <a href={WAITLIST_FALLBACK_MAILTO} className="underline font-medium">
+                    {WAITLIST_FALLBACK_EMAIL}
+                  </a>{" "}
+                  and we&apos;ll add you by hand.
+                </p>
+              )}
               <p className="text-warm-brown/40 text-xs mt-2">
                 Be the first to know when we launch. No spam, ever.
               </p>

@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Honest failure: if the signup is not saved, say so (non-2xx) so the page
+// can show the "email us instead" fallback. Never log the visitor's email.
+const FALLBACK_EMAIL = "cherie@solasgallery.com";
+
+function notSaved(status: number) {
+  return NextResponse.json(
+    { ok: false, code: "WAITLIST_NOT_SAVED", fallbackEmail: FALLBACK_EMAIL },
+    { status }
+  );
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { email, name } = await req.json();
@@ -12,8 +23,8 @@ export async function POST(req: NextRequest) {
     const listId = parseInt(process.env.BREVO_LIST_ID || "45");
 
     if (!apiKey) {
-      console.error("BREVO_API_KEY not set");
-      return NextResponse.json({ ok: true }); // Don't break UX
+      console.error("[SW-WAITLIST] BREVO_API_KEY missing — signup NOT saved");
+      return notSaved(503);
     }
 
     const res = await fetch("https://api.brevo.com/v3/contacts", {
@@ -31,13 +42,20 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok && res.status !== 204) {
-      const body = await res.text();
-      console.error("Brevo error:", res.status, body);
+      let code = "";
+      try {
+        code = String((await res.json())?.code ?? "");
+      } catch {}
+      console.error(`[SW-WAITLIST] Brevo error ${res.status} ${code} — signup NOT saved`);
+      return notSaved(502);
     }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("Waitlist error:", err);
-    return NextResponse.json({ ok: true }); // Fail silently for UX
+    console.error(
+      "[SW-WAITLIST] waitlist error — signup NOT saved:",
+      err instanceof Error ? err.name : "unknown"
+    );
+    return notSaved(500);
   }
 }
