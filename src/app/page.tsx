@@ -9,7 +9,7 @@ export const revalidate = 3600;
 const STEPS = [
   { n: "1", t: "You write a note and pick a month", d: "Tell us who the letters are for, where they should be mailed, and the month you want the first one to arrive." },
   { n: "2", t: "We email you to complete payment", d: `We read your request and write to you personally. Nothing is charged on this page. The subscription is ${SITE.priceLabel}.` },
-  { n: "3", t: "A letter comes in the mail", d: "One paper letter a month, in the voice of a wise old friend, addressed to her. Your note goes with the first one." },
+  { n: "3", t: "A letter comes in the mail", d: "One paper letter a month, in the voice of a wise old friend, addressed to her." },
 ];
 
 export default function Home() {
