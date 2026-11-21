@@ -18,6 +18,10 @@ export async function POST(req: NextRequest) {
     const attrs: Record<string, string> = {};
     if (first) attrs.FIRSTNAME = first;
     if (last) attrs.LASTNAME = last;
+    // Optional phone from /capture. Stored as the plain-text PHONE attribute (not SMS: SMS needs E.164 and must be
+    // unique, so a typo there would make Brevo reject the whole signup).
+    const phone = String(body.phone || "").replace(/[^\d+().\- ]/g, "").trim().slice(0, 40);
+    if (phone) attrs.PHONE = phone;
     if (!process.env.BREVO_API_KEY) {
       console.error("[SW-WAITLIST] BREVO_API_KEY missing — signup NOT saved");
       return NextResponse.json(

@@ -63,34 +63,63 @@ ${row("Start month", startLabel)}${row("Price shown", SITE.priceLabel)}${row("Gi
 ${row("OK to add giver to updates list", d.keepPosted ? "yes" : "no")}
 </table>`;
 
-  const teamOk = await sendMail({
-    to: SITE.notifyEmails,
-    replyTo: d.giverEmail,
-    subject: `Gift request: ${d.giverName} for ${d.recipientName}, starting ${startLabel}`,
-    html: teamHtml,
-  });
+  // The team email is the record of the request. Only its failure is a real failure.
+  let teamOk = false;
+  try {
+    teamOk = await sendMail({
+      to: SITE.notifyEmails,
+      replyTo: d.giverEmail,
+      subject: `Gift request: ${d.giverName} for ${d.recipientName}, starting ${startLabel}`,
+      html: teamHtml,
+    });
+  } catch (err) {
+    console.error("[SW-GIFT] team notification threw:", err instanceof Error ? err.name : "unknown");
+  }
   if (!teamOk) {
     console.error("[SW-GIFT] team notification NOT sent — gift request NOT received");
     return NextResponse.json({ ok: false, error: "We could not send your request just now. Nothing was submitted." }, { status: 502 });
   }
 
-  // Courtesy copy to the giver. Failure here does not fail the request (the team already has it).
-  const copyOk = await sendMail({
-    to: [d.giverEmail],
-    replyTo: SITE.replyEmail,
-    subject: "We have your Sister Wisdoms gift request",
-    // Fixed text only: never echo anything the submitter typed (names, message).
-    html: `<p>We have your gift request and will email you to complete payment.</p>
+  // From here on the request IS received. Nothing below may turn it into a failure.
+
+  // Courtesy copy to the giver.
+  let copyOk = false;
+  try {
+    copyOk = await sendMail({
+      to: [d.giverEmail],
+      replyTo: SITE.replyEmail,
+      subject: "We have your Sister Wisdoms gift request",
+      // Fixed text only: never echo anything the submitter typed (names, message).
+      html: `<p>We have your gift request and will email you to complete payment.</p>
 <p>Tim &amp; Cherie Flanagan<br/>Sister Wisdoms, Salado, Texas</p>`,
-  });
+    });
+  } catch (err) {
+    console.error("[SW-GIFT] giver copy threw:", err instanceof Error ? err.name : "unknown");
+  }
+  if (!copyOk) console.error("[SW-GIFT] request received, but the giver copy was NOT sent");
 
   // listAdded: null = not requested, true = added (or intentionally skipped on preview), false = failed.
   let listAdded: boolean | null = null;
   if (d.keepPosted) {
     const [first, ...rest] = d.giverName.split(" ");
-    listAdded = await addContact(d.giverEmail, { FIRSTNAME: first, LASTNAME: rest.join(" ") });
-    if (!listAdded) console.error("[SW-GIFT] news opt-in requested but contact NOT saved");
+    try {
+      listAdded = await addContact(d.giverEmail, { FIRSTNAME: first, LASTNAME: rest.join(" ") });
+    } catch (err) {
+      console.error("[SW-GIFT] news opt-in threw:", err instanceof Error ? err.name : "unknown");
+      listAdded = false;
+    }
+    if (!listAdded) console.error("[SW-GIFT] request received; news opt-in requested but contact NOT saved");
   }
+  const list = listAdded === null ? "none" : isPreview() ? "preview" : listAdded ? "added" : "failed";
 
-  return NextResponse.json({ ok: true, copySent: copyOk, listAdded, preview: isPreview(), startLabel });
+  return NextResponse.json({
+    ok: true,
+    received: true,
+    giverCopy: copyOk ? "sent" : "failed",
+    list,
+    copySent: copyOk,
+    listAdded,
+    preview: isPreview(),
+    startLabel,
+  });
 }

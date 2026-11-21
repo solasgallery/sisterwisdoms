@@ -28,11 +28,16 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
       const res = await fetch("/api/gift", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const json = await res.json().catch(() => ({ ok: false }));
       if (!res.ok || json.ok !== true) throw new Error(typeof json.error === "string" ? json.error : "failed");
-      setDone({ giver: String(body.giverEmail), recipient: String(body.recipientName), start: json.startLabel || "", preview: !!json.preview, copySent: json.copySent === true, listFailed: json.listAdded === false });
+      // The request counts as received once the server says ok. A failed giver copy or list add is a caveat, not a failure.
+      const copySent = json.giverCopy ? json.giverCopy === "sent" : json.copySent === true;
+      const listFailed = json.list ? json.list === "failed" : json.listAdded === false;
+      setDone({ giver: String(body.giverEmail), recipient: String(body.recipientName), start: json.startLabel || "", preview: !!json.preview, copySent, listFailed });
       setState("done");
       (window as unknown as { dataLayer?: unknown[] }).dataLayer?.push({ event: "gift_request_submitted" });
     } catch (err) {
-      setError(err instanceof Error && err.message !== "failed" ? err.message : "We could not send your request just now.");
+      // A TypeError here is the browser failing to reach us (offline, dropped connection): never show its raw text.
+      const serverMsg = err instanceof Error && !(err instanceof TypeError) && err.message !== "failed" ? err.message : "";
+      setError(serverMsg || "We could not send your request just now.");
       setState("error");
     }
   }
@@ -48,7 +53,7 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
           <strong>You have not been charged.</strong> Tim or Cherie will email you at {done.giver} to complete payment and confirm
           the details. {done.copySent
             ? "A copy of your request is on its way to that address."
-            : "We could not send you a copy email, but we have your request."}
+            : "We could not send you a copy email just now, but your request reached us and we will follow up."}
         </p>
         {done.listFailed && (
           <p className="text-lg text-warm-brown leading-relaxed mt-3">
@@ -63,7 +68,7 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-10">
+    <form method="post" onSubmit={onSubmit} className="space-y-10">
       <fieldset className="space-y-4">
         <legend className="font-type text-lg text-deep-plum mb-2">1. Your message</legend>
         <div>

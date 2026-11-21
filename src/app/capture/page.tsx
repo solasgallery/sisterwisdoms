@@ -114,7 +114,7 @@ export default function CapturePage() {
             >
               A letter, by mail
             </p>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
+            <form method="post" onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
               <div>
                 <label htmlFor="firstName" style={labelStyle}>First Name</label>
                 <input id="firstName" name="firstName" type="text" required placeholder="First name" autoComplete="given-name" style={inputStyle} />
