@@ -4,7 +4,7 @@
 export const SITE = {
   url: "https://www.sisterwisdoms.com",
   name: "Sister Wisdoms",
-  priceUsd: 18, // $18/mo as shown on the live site. Do not change here without Tim (STATUS/OM say $12 - see DECISIONS).
+  priceUsd: 18, // $18/mo, locked by Tim 2026-11-21. Older $12/mo and $120/yr figures are superseded.
   priceLabel: "$18 a month",
   timezone: "America/Chicago",
   // First paid Letter 1 mails in this month (STATUS.md: "mailed by the 25th").

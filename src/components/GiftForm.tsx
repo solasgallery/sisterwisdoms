@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { StartOption } from "@/lib/config";
 
 const field =
@@ -10,6 +10,16 @@ const label = "block font-type text-sm text-deep-plum mb-1";
 export default function GiftForm({ options, price }: { options: StartOption[]; price: string }) {
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState("");
+  const [uncertain, setUncertain] = useState(false);
+  const doneRef = useRef<HTMLDivElement>(null);
+
+  // The form is replaced by the confirmation panel, which can land above the viewport. Bring it into view and focus it.
+  useEffect(() => {
+    if (state === "done" && doneRef.current) {
+      doneRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      doneRef.current.focus({ preventScroll: true });
+    }
+  }, [state]);
   const [done, setDone] = useState<{ giver: string; recipient: string; start: string; preview: boolean; copySent: boolean; listFailed: boolean } | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -24,6 +34,7 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
     };
     setState("sending");
     setError("");
+    setUncertain(false);
     try {
       const res = await fetch("/api/gift", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const json = await res.json().catch(() => ({ ok: false }));
@@ -36,15 +47,18 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
       (window as unknown as { dataLayer?: unknown[] }).dataLayer?.push({ event: "gift_request_submitted" });
     } catch (err) {
       // A TypeError here is the browser failing to reach us (offline, dropped connection): never show its raw text.
-      const serverMsg = err instanceof Error && !(err instanceof TypeError) && err.message !== "failed" ? err.message : "";
-      setError(serverMsg || "We could not send your request just now.");
+      // If the connection dropped we cannot know whether the request reached us, so don't say "Nothing was submitted".
+      const lostInTransit = err instanceof TypeError;
+      const serverMsg = err instanceof Error && !lostInTransit && err.message !== "failed" ? err.message : "";
+      setUncertain(lostInTransit);
+      setError(lostInTransit ? "We couldn't confirm your request reached us." : serverMsg || "We could not send your request just now.");
       setState("error");
     }
   }
 
   if (state === "done" && done) {
     return (
-      <div role="status" className="bg-soft-white border border-blush/60 rounded-md p-8 text-center">
+      <div ref={doneRef} tabIndex={-1} role="status" className="outline-none bg-soft-white border border-blush/60 rounded-md p-8 text-center">
         <p className="font-type text-2xl text-deep-plum mb-3">Your gift request is in.</p>
         <p className="text-lg text-warm-brown leading-relaxed">
           Thank you. We have your request for {done.recipient}, starting {done.start}.
@@ -152,8 +166,18 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
         </p>
         {state === "error" && (
           <p role="alert" className="mt-3 text-deep-plum font-semibold">
-            {error}{error.includes("Nothing was submitted") ? "" : " Nothing was submitted."} Please try again, or email{" "}
-            <a className="underline" href="mailto:cherie@solasgallery.com?subject=Sister%20Wisdoms%20gift">cherie@solasgallery.com</a>.
+            {uncertain ? (
+              <>
+                {error} Please don&apos;t send it again yet. Email{" "}
+                <a className="underline" href="mailto:cherie@solasgallery.com?subject=Sister%20Wisdoms%20gift%20-%20did%20it%20arrive%3F">cherie@solasgallery.com</a>{" "}
+                and we&apos;ll check whether it arrived.
+              </>
+            ) : (
+              <>
+                {error}{error.includes("Nothing was submitted") ? "" : " Nothing was submitted."} Please try again, or email{" "}
+                <a className="underline" href="mailto:cherie@solasgallery.com?subject=Sister%20Wisdoms%20gift">cherie@solasgallery.com</a>.
+              </>
+            )}
           </p>
         )}
       </div>
