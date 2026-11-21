@@ -10,7 +10,9 @@ const bodyFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500",
 const TITLE = "Sister Wisdoms | A Monthly Letter Subscription Gift";
 const DESC =
   "Give a monthly paper letter from a wise old friend, mailed to her door. Write a note, pick a start month, and we'll email you to finish. $18 a month, one tier.";
-const OG_ALT = "A typed letter on cream paper beside an envelope and dried lavender";
+const OG_ALT = "Sister Wisdoms. A letter, by mail.";
+// Trackers load on the production deployment only (not preview or local).
+const TRACK = process.env.VERCEL_ENV === "production";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -51,6 +53,7 @@ export default function RootLayout({
           If tracking isn't firing, the container is likely unpublished —
           open tagmanager.google.com > the container > Submit > Publish.
         */}
+        {TRACK && (
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -58,6 +61,7 @@ export default function RootLayout({
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-5TBFTKZT');`}
         </Script>
+        )}
 
         {/*
           Brevo page-view tracker (belt & suspenders alongside the GTM tag).
@@ -65,6 +69,7 @@ export default function RootLayout({
           Replace BREVO_CLIENT_KEY with the key from
           app.brevo.com > Automation > Settings > Tracking Code.
         */}
+        {TRACK && (
         <Script id="brevo-tracker" strategy="afterInteractive">
           {`(function() {
             var key = '9u1hsxe9gvu5e6i2ar4j28q2';
@@ -76,17 +81,18 @@ export default function RootLayout({
             fjs.parentNode.insertBefore(js, fjs);
           })();`}
         </Script>
+        )}
 
       </head>
       <body className="min-h-full flex flex-col bg-cream text-charcoal">
-        <noscript>
+        {TRACK && <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5TBFTKZT"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
-        </noscript>
+        </noscript>}
         <main className="flex-1">{children}</main>
       </body>
     </html>

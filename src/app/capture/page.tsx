@@ -48,7 +48,7 @@ export default function CapturePage() {
   }
 
   return (
-    <main
+    <div
       style={{
         minHeight: "100dvh",
         display: "flex",
@@ -116,24 +116,24 @@ export default function CapturePage() {
             </p>
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
               <div>
-                <label style={labelStyle}>First Name</label>
-                <input name="firstName" type="text" required placeholder="First name" autoComplete="given-name" style={inputStyle} />
+                <label htmlFor="firstName" style={labelStyle}>First Name</label>
+                <input id="firstName" name="firstName" type="text" required placeholder="First name" autoComplete="given-name" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Last Name</label>
-                <input name="lastName" type="text" required placeholder="Last name" autoComplete="family-name" style={inputStyle} />
+                <label htmlFor="lastName" style={labelStyle}>Last Name</label>
+                <input id="lastName" name="lastName" type="text" required placeholder="Last name" autoComplete="family-name" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Email</label>
-                <input name="email" type="email" required placeholder="you@example.com" autoComplete="email" style={inputStyle} />
+                <label htmlFor="email" style={labelStyle}>Email</label>
+                <input id="email" name="email" type="email" required placeholder="you@example.com" autoComplete="email" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>
-                  Phone <span style={{ color: "#c0b5a8" }}>(optional)</span>
+                <label htmlFor="phone" style={labelStyle}>
+                  Phone <span style={{ color: "#7A5C4F" }}>(optional)</span>
                 </label>
-                <input name="phone" type="tel" placeholder="(555) 555-5555" autoComplete="tel" style={inputStyle} />
+                <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" autoComplete="tel" style={inputStyle} />
               </div>
-              <input type="text" name="website" style={{ position: "absolute", left: "-9999px" }} tabIndex={-1} autoComplete="off" />
+              <input type="text" name="website" aria-hidden="true" style={{ position: "absolute", left: "-9999px" }} tabIndex={-1} autoComplete="off" />
               <button
                 type="submit"
                 disabled={loading}
@@ -151,15 +151,15 @@ export default function CapturePage() {
               >
                 {loading ? "Submitting…" : "Keep me posted"}
               </button>
-              {error && <p style={{ color: "#c45", fontSize: "0.8rem", textAlign: "center" }}>{error}</p>}
-              <p style={{ fontSize: "0.7rem", color: "#a09486", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
+              {error && <p style={{ color: "#9b2c3d", fontSize: "0.875rem", textAlign: "center" }}>{error}</p>}
+              <p style={{ fontSize: "0.8125rem", color: "#6b5a50", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
                 We will email you about Sister Wisdoms only. Unsubscribe anytime.
               </p>
             </form>
           </>
         )}
       </div>
-    </main>
+    </div>
   )
 }
 

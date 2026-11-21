@@ -39,7 +39,7 @@ export default function Home() {
       name: "Sister Wisdoms monthly letter subscription",
       description:
         "One paper letter a month, written in the voice of a wise old friend and mailed to the recipient's home. Available as a gift.",
-      image: `${SITE.url}/og-default.jpg`,
+      image: `${SITE.url}/logo.png`,
       brand: { "@type": "Brand", name: "Sister Wisdoms" },
       url: SITE.url,
       offers: {
@@ -109,11 +109,11 @@ export default function Home() {
                 height={1024}
                 priority
                 sizes="(min-width: 768px) 480px, 100vw"
-                alt="A typed letter on cream paper beside an envelope and a sprig of dried lavender on a wooden table"
+                alt="Generated illustration of a typed letter on cream paper"
                 className="rounded-md shadow-xl w-full h-auto"
               />
               <p className="text-sm text-warm-brown/80 mt-2">
-                Illustrative photograph.
+                Illustration: generated image, not an actual Sister Wisdoms letter.
               </p>
             </div>
           </div>

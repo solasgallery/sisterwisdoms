@@ -84,10 +84,13 @@ ${row("OK to add giver to updates list", d.keepPosted ? "yes" : "no")}
 <p>Tim &amp; Cherie Flanagan<br/>Sister Wisdoms, Salado, Texas</p>`,
   });
 
+  // listAdded: null = not requested, true = added (or intentionally skipped on preview), false = failed.
+  let listAdded: boolean | null = null;
   if (d.keepPosted) {
     const [first, ...rest] = d.giverName.split(" ");
-    await addContact(d.giverEmail, { FIRSTNAME: first, LASTNAME: rest.join(" ") });
+    listAdded = await addContact(d.giverEmail, { FIRSTNAME: first, LASTNAME: rest.join(" ") });
+    if (!listAdded) console.error("Gift request: news opt-in requested but contact add failed");
   }
 
-  return NextResponse.json({ ok: true, copySent: copyOk, preview: isPreview(), startLabel });
+  return NextResponse.json({ ok: true, copySent: copyOk, listAdded, preview: isPreview(), startLabel });
 }

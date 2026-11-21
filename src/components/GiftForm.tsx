@@ -10,7 +10,7 @@ const label = "block font-type text-sm text-deep-plum mb-1";
 export default function GiftForm({ options, price }: { options: StartOption[]; price: string }) {
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState("");
-  const [done, setDone] = useState<{ giver: string; recipient: string; start: string; preview: boolean } | null>(null);
+  const [done, setDone] = useState<{ giver: string; recipient: string; start: string; preview: boolean; copySent: boolean; listFailed: boolean } | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
       const res = await fetch("/api/gift", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const json = await res.json().catch(() => ({ ok: false }));
       if (!res.ok || json.ok !== true) throw new Error(typeof json.error === "string" ? json.error : "failed");
-      setDone({ giver: String(body.giverEmail), recipient: String(body.recipientName), start: json.startLabel || "", preview: !!json.preview });
+      setDone({ giver: String(body.giverEmail), recipient: String(body.recipientName), start: json.startLabel || "", preview: !!json.preview, copySent: json.copySent === true, listFailed: json.listAdded === false });
       setState("done");
       (window as unknown as { dataLayer?: unknown[] }).dataLayer?.push({ event: "gift_request_submitted" });
     } catch (err) {
@@ -46,8 +46,15 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
         </p>
         <p className="text-lg text-warm-brown leading-relaxed mt-3">
           <strong>You have not been charged.</strong> Tim or Cherie will email you at {done.giver} to complete payment and confirm
-          the details. A copy of your request is on its way to that address.
+          the details. {done.copySent
+            ? "A copy of your request is on its way to that address."
+            : "We could not send you a copy email, but we have your request."}
         </p>
+        {done.listFailed && (
+          <p className="text-lg text-warm-brown leading-relaxed mt-3">
+            We could not add you to the news list just now. Your gift request is not affected.
+          </p>
+        )}
         {done.preview && <p className="font-type text-xs text-warm-brown mt-4">Preview site: test request.</p>}
       </div>
     );
