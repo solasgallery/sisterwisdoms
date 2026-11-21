@@ -19,16 +19,28 @@ export async function POST(req: NextRequest) {
     if (first) attrs.FIRSTNAME = first;
     if (last) attrs.LASTNAME = last;
     if (!process.env.BREVO_API_KEY) {
-      console.error("BREVO_API_KEY not set");
-      return NextResponse.json({ ok: false, error: "Waitlist is temporarily unavailable" }, { status: 503 });
+      console.error("[SW-WAITLIST] BREVO_API_KEY missing — signup NOT saved");
+      return NextResponse.json(
+        { ok: false, code: "WAITLIST_NOT_SAVED", fallbackEmail: "cherie@solasgallery.com", error: "Waitlist is temporarily unavailable" },
+        { status: 503 }
+      );
     }
     // On preview, contact adds are skipped by design. Say so instead of claiming it was saved.
     if (isPreview()) return NextResponse.json({ ok: true, saved: false, preview: true });
     const ok = await addContact(email, attrs);
-    if (!ok) return NextResponse.json({ ok: false, error: "Waitlist provider rejected the request" }, { status: 502 });
+    if (!ok) {
+      console.error("[SW-WAITLIST] Brevo did not save the contact — signup NOT saved");
+      return NextResponse.json(
+        { ok: false, code: "WAITLIST_NOT_SAVED", fallbackEmail: "cherie@solasgallery.com", error: "Waitlist provider rejected the request" },
+        { status: 502 }
+      );
+    }
     return NextResponse.json({ ok: true, saved: true });
   } catch (err) {
-    console.error("Waitlist error:", err);
-    return NextResponse.json({ ok: false, error: "Waitlist request failed" }, { status: 500 });
+    console.error("[SW-WAITLIST] waitlist error — signup NOT saved:", err instanceof Error ? err.name : "unknown");
+    return NextResponse.json(
+      { ok: false, code: "WAITLIST_NOT_SAVED", fallbackEmail: "cherie@solasgallery.com", error: "Waitlist request failed" },
+      { status: 500 }
+    );
   }
 }

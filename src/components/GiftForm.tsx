@@ -52,7 +52,9 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
         </p>
         {done.listFailed && (
           <p className="text-lg text-warm-brown leading-relaxed mt-3">
-            We could not add you to the news list just now. Your gift request is not affected.
+            We couldn&apos;t add you to the news list just now. Your gift request is not affected. Email us at{" "}
+            <a className="underline" href="mailto:cherie@solasgallery.com?subject=Please%20add%20me%20to%20the%20Sister%20Wisdoms%20waitlist">cherie@solasgallery.com</a>{" "}
+            and we&apos;ll add you by hand.
           </p>
         )}
         {done.preview && <p className="font-type text-xs text-warm-brown mt-4">Preview site: test request.</p>}

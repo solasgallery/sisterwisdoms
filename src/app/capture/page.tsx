@@ -42,7 +42,7 @@ export default function CapturePage() {
       setSaved(j.saved === true)
       setSubmitted(true)
     } catch {
-      setError("We could not save your details. Please try again, or email info@solasgallery.com.")
+      setError("not-saved")
       setLoading(false)
     }
   }
@@ -151,7 +151,13 @@ export default function CapturePage() {
               >
                 {loading ? "Submitting…" : "Keep me posted"}
               </button>
-              {error && <p style={{ color: "#9b2c3d", fontSize: "0.875rem", textAlign: "center" }}>{error}</p>}
+              {error && (
+                <p role="alert" style={{ color: "#9b2c3d", fontSize: "0.875rem", textAlign: "center", lineHeight: 1.4 }}>
+                  We couldn&apos;t save your spot just now. Email us at{" "}
+                  <a href="mailto:cherie@solasgallery.com?subject=Please%20add%20me%20to%20the%20Sister%20Wisdoms%20waitlist" style={{ color: "#6B3A5D", fontWeight: 600 }}>cherie@solasgallery.com</a>{" "}
+                  and we&apos;ll add you by hand.
+                </p>
+              )}
               <p style={{ fontSize: "0.8125rem", color: "#6b5a50", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
                 We will email you about Sister Wisdoms only. Unsubscribe anytime.
               </p>

@@ -70,6 +70,7 @@ ${row("OK to add giver to updates list", d.keepPosted ? "yes" : "no")}
     html: teamHtml,
   });
   if (!teamOk) {
+    console.error("[SW-GIFT] team notification NOT sent — gift request NOT received");
     return NextResponse.json({ ok: false, error: "We could not send your request just now. Nothing was submitted." }, { status: 502 });
   }
 
@@ -88,7 +89,7 @@ ${row("OK to add giver to updates list", d.keepPosted ? "yes" : "no")}
   if (d.keepPosted) {
     const [first, ...rest] = d.giverName.split(" ");
     listAdded = await addContact(d.giverEmail, { FIRSTNAME: first, LASTNAME: rest.join(" ") });
-    if (!listAdded) console.error("Gift request: news opt-in requested but contact add failed");
+    if (!listAdded) console.error("[SW-GIFT] news opt-in requested but contact NOT saved");
   }
 
   return NextResponse.json({ ok: true, copySent: copyOk, listAdded, preview: isPreview(), startLabel });
