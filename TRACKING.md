@@ -15,7 +15,7 @@
 - JSON-LD @type: ["Organization", "Service"]
 - serviceType: "Subscription mail club"
 - metadataBase: https://sisterwisdoms.com
-- OG image placeholder: /og-default.jpg (will be served once image is created in repo)
+- OG/Twitter image: /og-teaser.jpg (1200x630, Courier Prime on the site palette: "Sister Wisdoms" / "Something beautiful is on its way."; replaced og-default.jpg 2026-11-21, Amendment 2)
 - Sitemap includes all 9 pages: home, about, collections, contact, faq, gift, how-it-works, mailing-dates, subscribe
 
 ## How to verify the deploy
@@ -35,5 +35,4 @@
 
 ## Notes
 - Brevo key is shared across all 4 sites in this rollout (9u1hsxe9gvu5e6i2ar4j28q2) — do not treat it as secret.
-- The og-default.jpg image does not yet exist in the repo — that's a separate asset creation step. Until it's added, OG previews will fall back to the site name + description.
 - Google Search Console verification token (REPLACE_WITH_GSC_TOKEN) must be updated once the property is confirmed in search.google.com/search-console.

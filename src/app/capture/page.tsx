@@ -6,6 +6,7 @@ export default function CapturePage() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -16,6 +17,7 @@ export default function CapturePage() {
     const formData = new FormData(form)
 
     if (formData.get("website")) {
+      setLoading(false)
       setSubmitted(true)
       return
     }
@@ -35,24 +37,27 @@ export default function CapturePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
-      if (!res.ok) throw new Error("Network error")
+      const j = await res.json().catch(() => ({}))
+      if (!res.ok || !j.ok) throw new Error("Not saved")
+      setSaved(j.saved === true)
       setSubmitted(true)
-    } catch {
-      setError("Something went wrong. Please try again or ask staff for help.")
+    } catch (err) {
+      // A dropped connection means we can't tell whether the signup reached us.
+      setError(err instanceof TypeError ? "unconfirmed" : "not-saved")
       setLoading(false)
     }
   }
 
   return (
-    <main
+    <div
       style={{
         minHeight: "100dvh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#f7f2ed",
+        background: "#FDF8F0",
         padding: "24px",
-        fontFamily: "'Inter', system-ui, sans-serif",
+        fontFamily: "var(--font-body), Georgia, serif",
       }}
     >
       <div
@@ -69,29 +74,29 @@ export default function CapturePage() {
       >
         {submitted ? (
           <div>
-            <div style={{ fontSize: "3rem", marginBottom: "12px" }}>&#x2713;</div>
+            <div aria-hidden="true" style={{ fontSize: "3rem", marginBottom: "12px" }}>&#x2713;</div>
             <h2
               style={{
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: "var(--font-type), 'Courier New', monospace",
                 fontSize: "1.5rem",
-                color: "#7a4a6e",
+                color: "#6B3A5D",
                 marginBottom: "8px",
               }}
             >
-              You're on the List!
+              {saved ? "You're on the list — we'll write when there's news." : "Preview: not saved"}
             </h2>
-            <p style={{ color: "#8a7e74", fontSize: "0.9rem" }}>
-              We'll reach out when the next retreat is announced. Something beautiful is coming.
-            </p>
+            {!saved && (
+              <p style={{ color: "#7A5C4F", fontSize: "1rem" }}>This is a preview site. Nothing was added to the list.</p>
+            )}
           </div>
         ) : (
           <>
             <h1
               style={{
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: "var(--font-type), 'Courier New', monospace",
                 fontWeight: 700,
                 fontSize: "1.6rem",
-                color: "#7a4a6e",
+                color: "#6B3A5D",
                 marginBottom: "4px",
               }}
             >
@@ -100,34 +105,34 @@ export default function CapturePage() {
             <p
               style={{
                 fontSize: "0.85rem",
-                color: "#8a7e74",
+                color: "#7A5C4F",
                 marginBottom: "24px",
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: "var(--font-type), 'Courier New', monospace",
                 fontStyle: "italic",
               }}
             >
-              Creative retreats for women
+              A letter, by mail
             </p>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
+            <form method="post" onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
               <div>
-                <label style={labelStyle}>First Name</label>
-                <input name="firstName" type="text" required placeholder="First name" autoComplete="given-name" style={inputStyle} />
+                <label htmlFor="firstName" style={labelStyle}>First Name</label>
+                <input id="firstName" name="firstName" type="text" required placeholder="First name" autoComplete="given-name" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Last Name</label>
-                <input name="lastName" type="text" required placeholder="Last name" autoComplete="family-name" style={inputStyle} />
+                <label htmlFor="lastName" style={labelStyle}>Last Name</label>
+                <input id="lastName" name="lastName" type="text" required placeholder="Last name" autoComplete="family-name" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Email</label>
-                <input name="email" type="email" required placeholder="you@example.com" autoComplete="email" style={inputStyle} />
+                <label htmlFor="email" style={labelStyle}>Email</label>
+                <input id="email" name="email" type="email" required placeholder="you@example.com" autoComplete="email" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>
-                  Phone <span style={{ color: "#c0b5a8" }}>(optional)</span>
+                <label htmlFor="phone" style={labelStyle}>
+                  Phone <span style={{ color: "#7A5C4F" }}>(optional)</span>
                 </label>
-                <input name="phone" type="tel" placeholder="(555) 555-5555" autoComplete="tel" style={inputStyle} />
+                <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" autoComplete="tel" style={inputStyle} />
               </div>
-              <input type="text" name="website" style={{ position: "absolute", left: "-9999px" }} tabIndex={-1} autoComplete="off" />
+              <input type="text" name="website" aria-hidden="true" style={{ position: "absolute", left: "-9999px" }} tabIndex={-1} autoComplete="off" />
               <button
                 type="submit"
                 disabled={loading}
@@ -135,7 +140,7 @@ export default function CapturePage() {
                   padding: "14px",
                   border: "none",
                   borderRadius: "8px",
-                  background: "#7a4a6e",
+                  background: "#6B3A5D",
                   color: "#fff",
                   fontSize: "1rem",
                   fontWeight: 500,
@@ -143,17 +148,23 @@ export default function CapturePage() {
                   opacity: loading ? 0.5 : 1,
                 }}
               >
-                {loading ? "Submitting…" : "Join the Waitlist"}
+                {loading ? "Submitting…" : "Keep me posted"}
               </button>
-              {error && <p style={{ color: "#c45", fontSize: "0.8rem", textAlign: "center" }}>{error}</p>}
-              <p style={{ fontSize: "0.7rem", color: "#a09486", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
-                Be the first to know about upcoming retreats. Unsubscribe anytime.
+              {error && (
+                <p role="alert" style={{ color: "#9b2c3d", fontSize: "0.875rem", textAlign: "center", lineHeight: 1.4 }}>
+                  {error === "unconfirmed" ? "We couldn\u2019t confirm you were added." : "We couldn\u2019t add you to the list just now."} Email us at{" "}
+                  <a href="mailto:cherie@solasgallery.com?subject=Please%20add%20me%20to%20the%20Sister%20Wisdoms%20waitlist" style={{ color: "#6B3A5D", fontWeight: 600 }}>cherie@solasgallery.com</a>{" "}
+                  and we&apos;ll add you by hand.
+                </p>
+              )}
+              <p style={{ fontSize: "0.8125rem", color: "#6b5a50", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
+                We will email you about Sister Wisdoms only. Unsubscribe anytime.
               </p>
             </form>
           </>
         )}
       </div>
-    </main>
+    </div>
   )
 }
 
@@ -161,7 +172,7 @@ const labelStyle: React.CSSProperties = {
   fontSize: "0.75rem",
   textTransform: "uppercase",
   letterSpacing: "0.08em",
-  color: "#8a7e74",
+  color: "#7A5C4F",
   display: "block",
   marginBottom: "4px",
 }

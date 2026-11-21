@@ -1,42 +1,40 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Courier_Prime, Cormorant_Garamond } from "next/font/google";
+import { SITE } from "@/lib/config";
 import "./globals.css";
 
+const typeFont = Courier_Prime({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-type", display: "swap" });
+const bodyFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--font-body", display: "swap" });
+
+const TITLE = "Sister Wisdoms | Something beautiful is on its way";
+const DESC =
+  "One paper letter a month from a wise old friend, mailed to someone you love. Coming soon from Salado, Texas.";
+const OG_ALT = "Sister Wisdoms. Something beautiful is on its way.";
+// Trackers load on the production deployment only (not preview or local).
+const TRACK = process.env.VERCEL_ENV === "production";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sisterwisdoms.com"),
-  title: {
-    default: "Sister Wisdoms — Something Beautiful Is On Its Way",
-    template: "%s | Sister Wisdoms",
-  },
-  description:
-    "A monthly letter from a wise old friend — arriving in your mailbox, written on paper worth keeping. Coming soon from Salado, Texas.",
-  alternates: {
-    canonical: "/",
-  },
+  metadataBase: new URL(SITE.url),
+  title: { absolute: TITLE },
+  description: DESC,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://sisterwisdoms.com",
+    url: SITE.url,
     siteName: "Sister Wisdoms",
-    images: [
-      {
-        url: "/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Sister Wisdoms — Letters Worth Keeping",
-      },
-    ],
+    title: TITLE,
+    description: DESC,
+    images: [{ url: "/og-teaser.jpg", width: 1200, height: 630, alt: OG_ALT }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sister Wisdoms — Letters Worth Keeping",
-    description:
-      "A snail mail subscription club delivering hand-curated letters of wisdom, story, and connection.",
-    images: ["/og-default.jpg"],
+    title: TITLE,
+    description: DESC,
+    images: [{ url: "/og-teaser.jpg", alt: OG_ALT }],
   },
-  verification: {
-    google: "YSl8UjrL_9v6Jdo-C0G5RD-g7Umk4I6jn8lvIn95Hec",
-  },
+  verification: { google: "YSl8UjrL_9v6Jdo-C0G5RD-g7Umk4I6jn8lvIn95Hec" },
 };
 
 export default function RootLayout({
@@ -45,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`h-full antialiased ${typeFont.variable} ${bodyFont.variable}`}>
       <head>
         {/*
           Google Tag Manager
@@ -55,6 +53,7 @@ export default function RootLayout({
           If tracking isn't firing, the container is likely unpublished —
           open tagmanager.google.com > the container > Submit > Publish.
         */}
+        {TRACK && (
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -62,6 +61,7 @@ export default function RootLayout({
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-5TBFTKZT');`}
         </Script>
+        )}
 
         {/*
           Brevo page-view tracker (belt & suspenders alongside the GTM tag).
@@ -69,6 +69,7 @@ export default function RootLayout({
           Replace BREVO_CLIENT_KEY with the key from
           app.brevo.com > Automation > Settings > Tracking Code.
         */}
+        {TRACK && (
         <Script id="brevo-tracker" strategy="afterInteractive">
           {`(function() {
             var key = '9u1hsxe9gvu5e6i2ar4j28q2';
@@ -80,38 +81,18 @@ export default function RootLayout({
             fjs.parentNode.insertBefore(js, fjs);
           })();`}
         </Script>
+        )}
 
-        {/*
-          JSON-LD structured data for Sister Wisdoms
-          Type: Organization + Service (subscription mail club)
-        */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": ["Organization", "Service"],
-              "@id": "https://sisterwisdoms.com/#business",
-              name: "Sister Wisdoms",
-              description:
-                "A snail mail subscription club delivering hand-curated letters of wisdom, story, and connection to your mailbox each month.",
-              url: "https://sisterwisdoms.com",
-              serviceType: "Subscription mail club",
-              image: "https://sisterwisdoms.com/og-default.jpg",
-              sameAs: [],
-            }),
-          }}
-        />
       </head>
       <body className="min-h-full flex flex-col bg-cream text-charcoal">
-        <noscript>
+        {TRACK && <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5TBFTKZT"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
-        </noscript>
+        </noscript>}
         <main className="flex-1">{children}</main>
       </body>
     </html>
