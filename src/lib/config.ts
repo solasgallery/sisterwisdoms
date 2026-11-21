@@ -36,14 +36,20 @@ function nowChicago(now = new Date()): [number, number, string] {
 
 export type StartOption = { value: string; label: string };
 
-/** Start months a giver can pick. Past months drop off automatically (computed per request). */
+/** Start months a giver can pick. A month drops off once its mail-by day has passed
+ * (day-of-month taken from SITE.firstLetterMailBy, Chicago time), computed per request. */
 export function startOptions(now = new Date()): StartOption[] {
   const [fy, fm] = SITE.firstLetterMonth.split("-").map(Number);
-  const [cy, cm] = nowChicago(now);
+  const mailByDay = Number(SITE.firstLetterMailBy.slice(8, 10));
+  const today = nowChicago(now)[2]; // YYYY-MM-DD
   let y = fy;
   let m = fm - 1;
-  // never offer a month before the current one
-  if (cy > y || (cy === y && cm > m)) { y = cy; m = cm; }
+  const mailBy = (yy: number, mm: number) => `${yy}-${String(mm + 1).padStart(2, "0")}-${String(mailByDay).padStart(2, "0")}`;
+  // skip every month whose mail-by date is already past
+  while (mailBy(y, m) < today) {
+    m++;
+    if (m > 11) { m = 0; y++; }
+  }
   const out: StartOption[] = [];
   for (let i = 0; i < SITE.startMonthsOffered; i++) {
     const value = `${y}-${String(m + 1).padStart(2, "0")}`;

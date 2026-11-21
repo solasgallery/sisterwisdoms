@@ -78,9 +78,8 @@ ${row("OK to add giver to updates list", d.keepPosted ? "yes" : "no")}
     to: [d.giverEmail],
     replyTo: SITE.replyEmail,
     subject: "We have your Sister Wisdoms gift request",
-    html: `<p>Hello ${esc(d.giverName)},</p>
-<p>Thank you. We have your gift request for ${esc(d.recipientName)}, starting ${esc(startLabel)}.</p>
-<p><b>You have not been charged.</b> We will email you personally to complete payment and confirm the details. Reply to this message if anything above needs to change.</p>
+    // Fixed text only: never echo anything the submitter typed (names, message).
+    html: `<p>We have your gift request and will email you to complete payment.</p>
 <p>Tim &amp; Cherie Flanagan<br/>Sister Wisdoms, Salado, Texas</p>`,
   });
 

@@ -126,8 +126,8 @@ export default function GiftForm({ options, price }: { options: StartOption[]; p
           <label htmlFor="giverPhone" className={label}>Your phone (optional)</label>
           <input id="giverPhone" name="giverPhone" type="tel" maxLength={40} autoComplete="tel" className={field} />
         </div>
-        <label className="flex items-start gap-3 text-base text-warm-brown py-2">
-          <input type="checkbox" name="keepPosted" className="mt-1 h-6 w-6 shrink-0" />
+        <label className="flex items-center gap-3 text-base text-warm-brown min-h-[44px] py-2 cursor-pointer">
+          <input type="checkbox" name="keepPosted" className="h-6 w-6 shrink-0" />
           <span>Also send me occasional Sister Wisdoms news by email.</span>
         </label>
         <div className="hidden" aria-hidden="true">
