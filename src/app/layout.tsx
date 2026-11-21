@@ -1,42 +1,39 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Courier_Prime, Cormorant_Garamond, Caveat } from "next/font/google";
+import { SITE } from "@/lib/config";
 import "./globals.css";
 
+const typeFont = Courier_Prime({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-type", display: "swap" });
+const bodyFont = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--font-body", display: "swap" });
+const handFont = Caveat({ subsets: ["latin"], weight: ["600"], variable: "--font-hand", display: "swap" });
+
+const TITLE = "Sister Wisdoms | A Monthly Letter Subscription Gift";
+const DESC =
+  "Give a monthly paper letter from a wise old friend, mailed to her door from Salado, Texas. Add your message, pick a start month. $18 a month, one tier.";
+const OG_ALT = "A typed letter on cream paper beside an envelope and dried lavender";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sisterwisdoms.com"),
-  title: {
-    default: "Sister Wisdoms — Something Beautiful Is On Its Way",
-    template: "%s | Sister Wisdoms",
-  },
-  description:
-    "A monthly letter from a wise old friend — arriving in your mailbox, written on paper worth keeping. Coming soon from Salado, Texas.",
-  alternates: {
-    canonical: "/",
-  },
+  metadataBase: new URL(SITE.url),
+  title: { absolute: TITLE },
+  description: DESC,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://sisterwisdoms.com",
+    url: SITE.url,
     siteName: "Sister Wisdoms",
-    images: [
-      {
-        url: "/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Sister Wisdoms — Letters Worth Keeping",
-      },
-    ],
+    title: TITLE,
+    description: DESC,
+    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: OG_ALT }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sister Wisdoms — Letters Worth Keeping",
-    description:
-      "A snail mail subscription club delivering hand-curated letters of wisdom, story, and connection.",
-    images: ["/og-default.jpg"],
+    title: TITLE,
+    description: DESC,
+    images: [{ url: "/og-default.jpg", alt: OG_ALT }],
   },
-  verification: {
-    google: "YSl8UjrL_9v6Jdo-C0G5RD-g7Umk4I6jn8lvIn95Hec",
-  },
+  verification: { google: "YSl8UjrL_9v6Jdo-C0G5RD-g7Umk4I6jn8lvIn95Hec" },
 };
 
 export default function RootLayout({
@@ -45,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`h-full antialiased ${typeFont.variable} ${bodyFont.variable} ${handFont.variable}`}>
       <head>
         {/*
           Google Tag Manager
@@ -81,27 +78,6 @@ export default function RootLayout({
           })();`}
         </Script>
 
-        {/*
-          JSON-LD structured data for Sister Wisdoms
-          Type: Organization + Service (subscription mail club)
-        */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": ["Organization", "Service"],
-              "@id": "https://sisterwisdoms.com/#business",
-              name: "Sister Wisdoms",
-              description:
-                "A snail mail subscription club delivering hand-curated letters of wisdom, story, and connection to your mailbox each month.",
-              url: "https://sisterwisdoms.com",
-              serviceType: "Subscription mail club",
-              image: "https://sisterwisdoms.com/og-default.jpg",
-              sameAs: [],
-            }),
-          }}
-        />
       </head>
       <body className="min-h-full flex flex-col bg-cream text-charcoal">
         <noscript>

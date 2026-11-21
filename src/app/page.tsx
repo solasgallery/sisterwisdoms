@@ -1,196 +1,192 @@
-"use client";
+import Image from "next/image";
+import GiftForm from "@/components/GiftForm";
+import { SITE, startOptions, firstMailingPhrase } from "@/lib/config";
+import { getFaq, faqJsonLd } from "@/lib/faq";
 
-import { useState } from "react";
+// Dated elements (start months, "first letters mail in...") are computed per request; refresh hourly.
+export const revalidate = 3600;
 
-/* ── Decorative wax-seal SVG ── */
-function WaxSeal({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 80 80"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle cx="40" cy="40" r="36" fill="currentColor" opacity="0.15" />
-      <circle cx="40" cy="40" r="28" fill="currentColor" opacity="0.25" />
-      <circle cx="40" cy="40" r="20" fill="currentColor" opacity="0.35" />
-      <text
-        x="40"
-        y="46"
-        textAnchor="middle"
-        fill="currentColor"
-        fontSize="18"
-        fontFamily="Caveat, cursive"
-        fontWeight="600"
-      >
-        SW
-      </text>
-    </svg>
-  );
-}
+const STEPS = [
+  { n: "1", t: "You write a note and pick a month", d: "Tell us who the letters are for, where they should be mailed, and the month you want the first one to arrive." },
+  { n: "2", t: "We email you to complete payment", d: `We read your request and write to you personally. Nothing is charged on this page. The subscription is ${SITE.priceLabel}.` },
+  { n: "3", t: "A letter comes in the mail", d: "One paper letter a month, in the voice of a wise old friend, addressed to her. Your note goes with the first one." },
+];
 
-/* ── Envelope icon ── */
-function EnvelopeIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 64 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="2"
-        y="2"
-        width="60"
-        height="44"
-        rx="4"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M2 6l30 22L62 6"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
+export default function Home() {
+  const now = new Date();
+  const faq = getFaq(now);
+  const options = startOptions(now);
 
-export default function ComingSoonPage() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubmitting(true);
-
-    try {
-      await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name }),
-      });
-      setSubmitted(true);
-    } catch {
-      // Still show success — don't punish the visitor for a backend hiccup
-      setSubmitted(true);
-    }
-
-    setSubmitting(false);
-  };
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": `${SITE.url}/#org`,
+      name: "Sister Wisdoms",
+      url: SITE.url,
+      logo: `${SITE.url}/og-default.jpg`,
+      parentOrganization: { "@type": "Organization", name: "Solas Gallery", url: "https://solasgallery.com" },
+      founder: [
+        { "@type": "Person", name: "Tim Flanagan" },
+        { "@type": "Person", name: "Cherie Flanagan" },
+      ],
+      address: { "@type": "PostalAddress", addressLocality: "Salado", addressRegion: "TX", addressCountry: "US" },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "@id": `${SITE.url}/#product`,
+      name: "Sister Wisdoms monthly letter subscription",
+      description:
+        "One paper letter a month, written in the voice of a wise old friend and mailed to the recipient's home. Available as a gift.",
+      image: `${SITE.url}/og-default.jpg`,
+      brand: { "@type": "Brand", name: "Sister Wisdoms" },
+      url: SITE.url,
+      offers: {
+        "@type": "Offer",
+        url: `${SITE.url}/#gift`,
+        price: SITE.priceUsd.toFixed(2),
+        priceCurrency: "USD",
+        availability: "https://schema.org/PreOrder",
+        priceSpecification: {
+          "@type": "UnitPriceSpecification",
+          price: SITE.priceUsd.toFixed(2),
+          priceCurrency: "USD",
+          billingDuration: 1,
+          billingIncrement: 1,
+          unitCode: "MON",
+        },
+        seller: { "@id": `${SITE.url}/#org` },
+      },
+    },
+    faqJsonLd(now),
+  ];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* ── HERO ── */}
-      <section className="relative flex-1 flex items-center justify-center bg-gradient-to-b from-blush/20 via-cream to-cream py-20 md:py-32 overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-16 right-[12%] opacity-[0.07] animate-float hidden lg:block">
-          <EnvelopeIcon className="w-36 h-36 text-deep-plum" />
-        </div>
-        <div className="absolute bottom-20 left-[8%] opacity-[0.05] hidden lg:block rotate-[-8deg]">
-          <EnvelopeIcon className="w-24 h-24 text-warm-brown" />
-        </div>
+    <>
+      {jsonLd.map((j, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(j) }} />
+      ))}
 
-        <div className="max-w-2xl mx-auto px-6 text-center">
-          {/* Wax seal */}
-          <div className="flex justify-center mb-8">
-            <WaxSeal className="w-20 h-20 text-deep-plum" />
-          </div>
+      <header className="sticky top-0 z-20 bg-cream/95 backdrop-blur border-b border-blush/40">
+        <nav aria-label="Sections" className="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4">
+          <a href="#top" className="font-type font-bold text-deep-plum text-lg">Sister Wisdoms</a>
+          <ul className="hidden sm:flex gap-6 font-type text-sm text-warm-brown">
+            <li><a className="hover:text-deep-plum" href="#sample">The letter</a></li>
+            <li><a className="hover:text-deep-plum" href="#how">How it works</a></li>
+            <li><a className="hover:text-deep-plum" href="#faq">Questions</a></li>
+            <li><a className="hover:text-deep-plum" href="#founders">Who we are</a></li>
+          </ul>
+          <a href="#gift" className="bg-deep-plum text-soft-white font-type text-sm px-4 py-2 rounded-md hover:bg-warm-brown">Give a gift</a>
+        </nav>
+      </header>
 
-          {/* Brand name */}
-          <h1 className="font-handwritten text-5xl md:text-7xl text-deep-plum mb-4 tracking-wide">
-            Sister Wisdoms
-          </h1>
-
-          {/* Tagline */}
-          <p className="text-dusty-rose text-sm uppercase tracking-[0.25em] font-medium mb-10">
-            Something beautiful is on its way
-          </p>
-
-          {/* Description */}
-          <p className="text-warm-brown/80 text-lg md:text-xl leading-relaxed max-w-lg mx-auto mb-4">
-            A monthly letter from a wise old friend — the encouragement and
-            hard-won wisdom most of us wish someone would mail us — wrapped
-            in something beautiful enough to keep.
-          </p>
-          <p className="text-warm-brown/60 text-base leading-relaxed max-w-md mx-auto mb-12">
-            Bought as a gift. Single tier. $18 a month.
-            <br />
-            We&apos;re launching soon.
-          </p>
-
-          {/* ── EMAIL CAPTURE ── */}
-          {!submitted ? (
-            <form
-              onSubmit={handleSubmit}
-              className="max-w-md mx-auto space-y-3"
-            >
-              <input
-                type="text"
-                placeholder="Your first name (optional)"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-5 py-3.5 rounded-full bg-soft-white border border-blush/40 text-charcoal placeholder:text-warm-brown/40 text-sm focus:outline-none focus:border-deep-plum/50 focus:ring-1 focus:ring-deep-plum/20 transition-all"
-              />
-              <input
-                type="email"
-                required
-                placeholder="Your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-5 py-3.5 rounded-full bg-soft-white border border-blush/40 text-charcoal placeholder:text-warm-brown/40 text-sm focus:outline-none focus:border-deep-plum/50 focus:ring-1 focus:ring-deep-plum/20 transition-all"
-              />
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-deep-plum text-soft-white px-8 py-3.5 rounded-full text-sm tracking-widest uppercase font-medium hover:bg-warm-brown transition-colors disabled:opacity-60"
-              >
-                {submitting ? "Joining..." : "Join the Waitlist"}
-              </button>
-              <p className="text-warm-brown/40 text-xs mt-2">
-                Be the first to know when we launch. No spam, ever.
+      <div id="top">
+        {/* HERO */}
+        <section className="bg-gradient-to-b from-blush/25 to-cream">
+          <div className="max-w-5xl mx-auto px-5 py-14 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <p className="font-type text-sm uppercase tracking-[0.2em] text-warm-brown mb-4">A letter, by mail</p>
+              <h1 className="font-type font-bold text-4xl md:text-5xl text-deep-plum leading-tight mb-5">
+                A monthly letter subscription, given as a gift
+              </h1>
+              <p className="text-xl md:text-2xl text-warm-brown leading-relaxed mb-4">
+                One paper letter a month from a wise old friend, mailed to someone you love. The kind of encouragement most of
+                us wish somebody would send.
               </p>
-            </form>
-          ) : (
-            <div className="max-w-md mx-auto bg-soft-white rounded-2xl p-8 border border-blush/30 animate-fade-in-up">
-              <p className="font-handwritten text-3xl text-deep-plum mb-2">
-                You&apos;re on the list.
+              <p className="text-lg text-warm-brown mb-8">
+                {SITE.priceLabel}. One tier. {firstMailingPhrase(now)}
               </p>
-              <p className="text-warm-brown/70 text-sm leading-relaxed">
-                We&apos;ll write to you when the first letters are ready.
-                <br />
-                Thank you for believing the mailbox still holds magic.
+              <a href="#gift" className="inline-block bg-deep-plum text-soft-white font-type px-7 py-3.5 rounded-md hover:bg-warm-brown">
+                Start a gift
+              </a>
+              <a href="#sample" className="inline-block font-type text-deep-plum underline underline-offset-4 ml-5">See the letter</a>
+            </div>
+            <div id="sample" className="scroll-mt-24">
+              <Image
+                src="/sample-letter.webp"
+                width={768}
+                height={1024}
+                priority
+                sizes="(min-width: 768px) 480px, 100vw"
+                alt="A typed letter on cream paper beside an envelope and a sprig of dried lavender on a wooden table"
+                className="rounded-md shadow-xl w-full h-auto"
+              />
+              <p className="text-sm text-warm-brown/80 mt-2">
+                Illustrative photograph. Typed in Courier on good paper, the way every letter will look.
               </p>
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* ── BRIEF ABOUT ── */}
-      <section className="bg-soft-white border-t border-blush/20 py-16">
-        <div className="max-w-lg mx-auto px-6 text-center">
-          <p className="text-warm-brown/70 text-sm leading-relaxed mb-3">
-            From Tim &amp; Cherie Flanagan — a husband-and-wife team in
-            Salado, Texas, where they&apos;ve spent 30 years building{" "}
-            <a
-              href="https://solasgallery.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-deep-plum hover:text-dusty-rose transition-colors border-b border-deep-plum/20"
-            >
-              Solas Gallery
-            </a>{" "}
-            and a life around art, story, and community.
-          </p>
-          <p className="text-warm-brown/40 text-xs tracking-wide">
-            Sister Wisdoms · Salado, Texas · A Solas Gallery venture
-          </p>
+        {/* HOW */}
+        <section id="how" className="scroll-mt-16 bg-soft-white border-y border-blush/30">
+          <div className="max-w-5xl mx-auto px-5 py-14">
+            <h2 className="font-type font-bold text-3xl text-deep-plum mb-10">How it works</h2>
+            <ol className="grid md:grid-cols-3 gap-8">
+              {STEPS.map((s) => (
+                <li key={s.n}>
+                  <span className="font-type text-4xl text-dusty-rose">{s.n}</span>
+                  <h3 className="font-type font-bold text-lg text-deep-plum mt-2 mb-2">{s.t}</h3>
+                  <p className="text-lg text-warm-brown leading-relaxed">{s.d}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* GIFT */}
+        <section id="gift" className="scroll-mt-16">
+          <div className="max-w-2xl mx-auto px-5 py-14">
+            <h2 className="font-type font-bold text-3xl text-deep-plum mb-3">Give a Sister Wisdoms letter</h2>
+            <p className="text-lg text-warm-brown leading-relaxed mb-8">
+              Four short steps. When you send this, we email you to complete payment. We do not take payment on this page, and
+              you are not charged until you hear from us.
+            </p>
+            <GiftForm options={options} price={SITE.priceLabel} />
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section id="faq" className="scroll-mt-16 bg-soft-white border-y border-blush/30">
+          <div className="max-w-3xl mx-auto px-5 py-14">
+            <h2 className="font-type font-bold text-3xl text-deep-plum mb-8">Questions about giving a letter subscription</h2>
+            <div className="divide-y divide-blush/40">
+              {faq.map((f) => (
+                <details key={f.q} className="group py-4">
+                  <summary className="cursor-pointer font-type font-bold text-lg text-deep-plum list-none flex justify-between gap-4">
+                    <span>{f.q}</span>
+                    <span aria-hidden="true" className="text-dusty-rose group-open:rotate-45 transition-transform">+</span>
+                  </summary>
+                  <p className="text-lg text-warm-brown leading-relaxed mt-3">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FOUNDERS */}
+        <section id="founders" className="scroll-mt-16">
+          <div className="max-w-2xl mx-auto px-5 py-14 text-center">
+            <h2 className="font-type font-bold text-3xl text-deep-plum mb-5">Tim &amp; Cherie</h2>
+            <p className="text-xl text-warm-brown leading-relaxed mb-4">
+              We are Tim and Cherie Flanagan, a husband and wife in Salado, Texas. For 30 years we have built{" "}
+              <a className="underline text-deep-plum" href="https://solasgallery.com">Solas Gallery</a> and a life around art,
+              story, and community.
+            </p>
+            <p className="text-xl text-warm-brown leading-relaxed">
+              Sister Wisdoms comes from the same place: something made with care, that someone gets to hold.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <footer className="bg-deep-plum text-soft-white">
+        <div className="max-w-5xl mx-auto px-5 py-8 font-type text-sm flex flex-col sm:flex-row gap-2 justify-between">
+          <span>Sister Wisdoms · Salado, Texas · A Solas Gallery venture</span>
+          <a className="underline" href="https://solasgallery.com">solasgallery.com</a>
         </div>
-      </section>
-    </div>
+      </footer>
+    </>
   );
 }

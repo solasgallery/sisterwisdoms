@@ -81,7 +81,7 @@ export default function CapturePage() {
               You're on the List!
             </h2>
             <p style={{ color: "#8a7e74", fontSize: "0.9rem" }}>
-              We'll reach out when the next retreat is announced. Something beautiful is coming.
+              We'll email you when Sister Wisdoms letters are ready to give.
             </p>
           </div>
         ) : (
@@ -106,7 +106,7 @@ export default function CapturePage() {
                 fontStyle: "italic",
               }}
             >
-              Creative retreats for women
+              A monthly letter, by mail
             </p>
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
               <div>
@@ -147,7 +147,7 @@ export default function CapturePage() {
               </button>
               {error && <p style={{ color: "#c45", fontSize: "0.8rem", textAlign: "center" }}>{error}</p>}
               <p style={{ fontSize: "0.7rem", color: "#a09486", marginTop: "8px", textAlign: "center", lineHeight: 1.4 }}>
-                Be the first to know about upcoming retreats. Unsubscribe anytime.
+                We'll email you about Sister Wisdoms only. Unsubscribe anytime.
               </p>
             </form>
           </>
